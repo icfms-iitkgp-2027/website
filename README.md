@@ -1,16 +1,75 @@
-# React + Vite
+ICFMS 2027 - International Conference on Future Mobility Systems
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Official website for the International Conference on Future Mobility Systems (ICFMS 2027), organized by the Indian Institute of Technology (IIT) Kharagpur.
 
-Currently, two official plugins are available:
+Live Site: https://icfms-iitkgp-2027.github.io/website/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+📅 Conference Details
 
-## React Compiler
+Dates: 28-31 January 2027
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Venue: IIT Kharagpur Research Park, Rajarhat, Newtown, Kolkata, WB, India.
 
-## Expanding the ESLint configuration
+Theme: Celebrating 75 Golden Years of IIT Kharagpur by architecting future mobility ecosystems for a sustainable world.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🚀 Key Features
+
+Live Countdown: Dynamic timer tracking the abstract submission deadline.
+
+Interactive Themes: Detailed tracks covering Energy, Vehicular Tech, Policy, Traffic Autonomy, and more.
+
+Important Dates: Automated timeline for acceptance and submission notifications.
+
+Responsive Design: Optimized for mobile, tablet, and desktop viewing.
+
+Integrated Forms: Direct links for abstract submission and registration.
+
+🛠️ Tech Stack
+
+Framework: React 19
+
+Build Tool: Vite
+
+Styling: Tailwind CSS
+
+Icons: Lucide React
+
+Deployment: GitHub Pages
+
+💻 Local Development
+
+To run this project on your computer:
+
+Clone the repository:
+
+git clone [https://github.com/icfms-iitkgp-2027/website.git](https://github.com/icfms-iitkgp-2027/website.git)
+cd website
+
+
+Install dependencies:
+
+npm install
+
+
+Start the development server:
+
+npm run dev
+
+
+Open http://localhost:5173 in your browser.
+
+🚢 Deployment
+
+To publish changes to the live website:
+
+npm run deploy
+
+
+Note: This command builds the project and pushes the dist folder to the gh-pages branch.
+
+⚖️ License
+
+© 2027 ICFMS | Indian Institute of Technology Kharagpur. All Rights Reserved.
+"Yogaḥ Karmasu Kauśalam — Excellence in Action is Yoga"
+
+Developed with ❤️ by Kapil
