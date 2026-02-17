@@ -10,7 +10,7 @@ import {
 
 /**
  * ICFMS 2027 - PREMIER FUTURISTIC INTERFACE
- * Version 4.1: Enhanced Architecture Visuals, Clean Footer, Optimized Tech Feel
+ * Version 4.2: Direct Submission Redirection, Updated Nav Actions, Enhanced Spacing
  */
 
 // --- 3D WEBGL PARTICLE ENVIRONMENT ---
@@ -73,11 +73,17 @@ const App = () => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
+  const FORM_URL = "https://forms.gle/2ejuthB7udhpyVYL8";
+
   const imgPath = {
     logo: "https://raw.githubusercontent.com/kapil2020/web/main/logo%20pj.png",
     hero: "https://raw.githubusercontent.com/kapil2020/web/main/carousel-2.jpg.png",
     venue: "https://raw.githubusercontent.com/kapil2020/web/main/venue1.jpg",
     architecture: "https://raw.githubusercontent.com/kapil2020/web/main/Gallery/MobilityAI1_Cover.png?raw=true",
+  };
+
+  const handleSubmissionRedirect = () => {
+    window.open(FORM_URL, '_blank', 'noopener,noreferrer');
   };
 
   useEffect(() => {
@@ -122,13 +128,13 @@ const App = () => {
         {showModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[600] flex items-center justify-center px-4">
             <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={() => setShowModal(false)}></div>
-            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="relative bg-slate-900 border border-blue-500/30 p-10 rounded-[3rem] max-w-lg w-full shadow-2xl">
+            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className="relative bg-slate-900 border border-blue-500/30 p-10 rounded-[3rem] max-w-lg w-full shadow-2xl">
               <button onClick={() => setShowModal(false)} className="absolute top-8 right-8 text-slate-500 hover:text-white transition-colors"><X size={32}/></button>
               <div className="text-center space-y-8">
                 <div className="w-24 h-24 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto border border-blue-500/20"><Bell className="w-12 h-12 text-blue-500 animate-bounce" /></div>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none">Official Notice</h3>
-                <p className="text-slate-400 text-lg">The submission portal for <span className="text-blue-400 font-bold uppercase">ICFMS 2027</span> will launch on Feb 15, 2026. Stay tuned for the live link.</p>
-                <div className="py-4 px-6 bg-white/5 rounded-2xl border border-white/10 text-blue-400 font-bold uppercase tracking-widest text-sm">Access Coming Soon</div>
+                <p className="text-slate-400 text-lg">Detailed event documentation and schedules are currently being updated. The submission link is now live.</p>
+                <button onClick={() => { setShowModal(false); handleSubmissionRedirect(); }} className="py-4 px-8 bg-blue-600 rounded-2xl text-white font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-blue-600 transition-all shadow-xl">Go to Submission Portal</button>
               </div>
             </motion.div>
           </motion.div>
@@ -154,8 +160,8 @@ const App = () => {
                 {link}
               </a>
             ))}
-            <button onClick={() => setShowModal(true)} className="px-8 py-3 bg-white text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
-              Register
+            <button onClick={handleSubmissionRedirect} className="px-8 py-3 bg-white text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
+              Submit Abstract
             </button>
           </div>
           <button className="lg:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={32}/> : <Menu size={32}/>}</button>
@@ -199,7 +205,7 @@ const App = () => {
               </div>
 
               <div className="flex flex-wrap gap-8 pt-4">
-                <button onClick={() => setShowModal(true)} className="px-14 py-7 bg-white text-black font-black text-xs uppercase tracking-[0.3em] rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95">
+                <button onClick={handleSubmissionRedirect} className="px-14 py-7 bg-white text-black font-black text-xs uppercase tracking-[0.3em] rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95">
                   Submit Abstract
                 </button>
                 <a href="#themes" className="px-14 py-7 border-2 border-white/20 text-white font-black text-xs uppercase tracking-[0.3em] rounded-2xl hover:bg-white/10 transition-all backdrop-blur-md">
@@ -211,19 +217,14 @@ const App = () => {
             {/* Smart Mobility Architecture Image - Visual Focus */}
             <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }} className="hidden lg:flex lg:col-span-4 justify-end relative">
                <div className="relative group w-full max-w-sm">
-                  {/* Glowing Effect Background */}
                   <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-[4rem] blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-                  
-                  {/* Glassmorphic Frame */}
                   <div className="relative border-2 border-white/20 rounded-[4rem] overflow-hidden shadow-[0_0_50px_rgba(37,99,235,0.2)] transform rotate-3 group-hover:rotate-0 transition-all duration-1000 bg-slate-900/50 backdrop-blur-sm">
                      <img 
                         src={imgPath.architecture} 
-                        alt="Smart Mobility Architectural Vision" 
+                        alt="Smart Mobility Vision" 
                         className="w-full h-auto brightness-110 contrast-125 saturate-125 object-cover" 
                      />
                   </div>
-                  
-                  {/* Futuristic Corner Badge */}
                   <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-4 border-l-4 border-blue-500 rounded-bl-3xl" />
                   <div className="absolute -top-4 -right-4 w-12 h-12 border-t-4 border-r-4 border-cyan-400 rounded-tr-3xl" />
                </div>
