@@ -5,13 +5,13 @@ import {
   Calendar, MapPin, Mail, Globe, Zap, Cpu, Truck, ShieldCheck, 
   Leaf, Settings, ArrowRight, Navigation as MapNavigation, 
   Heart, Building2, BookOpen, Bell, Scale, BrainCircuit, Workflow, X, Menu, ExternalLink,
-  Facebook, Twitter, Linkedin, Timer, Award, Users, Book
+  Facebook, Twitter, Linkedin, Timer, Award, Users, Book, ChevronUp, Plus
 } from 'lucide-react';
 
 /**
  * ICFMS 2027 - THE OFFICIAL INTERFACE
- * Version 10.2: Final Stability & Syntax Fix
- * Design: Apple Aesthetic, Bento Stats, Submission Countdown
+ * Version 13.0: Detailed Professional Content + Apple Pro Responsiveness
+ * Design: High-contrast, Minimalist, Global Academic Excellence
  */
 
 // --- SUBTLE AMBIENT BACKGROUND ---
@@ -28,7 +28,7 @@ const TechCanvas = () => {
       mountRef.current.appendChild(renderer.domElement);
 
       const particlesGeometry = new THREE.BufferGeometry();
-      const count = 400; 
+      const count = window.innerWidth < 768 ? 150 : 400; 
       const posArray = new Float32Array(count * 3);
       for (let i = 0; i < count * 3; i++) posArray[i] = (Math.random() - 0.5) * 80;
       particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -42,11 +42,11 @@ const TechCanvas = () => {
 
       const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
       scene.add(particlesMesh);
-      camera.position.z = 30;
+      camera.position.z = 35;
 
       const animate = () => {
         requestAnimationFrame(animate);
-        particlesMesh.rotation.y += 0.0002;
+        particlesMesh.rotation.y += 0.0001;
         renderer.render(scene, camera);
       };
       animate();
@@ -63,7 +63,7 @@ const TechCanvas = () => {
         renderer.dispose();
       };
     } catch (e) {
-      console.error("Three.js initialization failed", e);
+      console.error(e);
     }
   }, []);
   
@@ -74,6 +74,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [activeFaq, setActiveFaq] = useState(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
@@ -93,7 +94,6 @@ const App = () => {
       const targetDate = new Date("2026-05-15T23:59:59").getTime();
       const now = new Date().getTime();
       const diff = targetDate - now;
-
       if (diff > 0) {
         setTimeLeft({
           days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -103,7 +103,7 @@ const App = () => {
         });
       }
     }, 1000);
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll);
     return () => {
       clearInterval(timer);
@@ -112,16 +112,22 @@ const App = () => {
   }, []);
 
   const themes = [
-    { title: "Energy for Mobility", icon: <Zap size={32}/>, color: "from-[#ff3b30] to-[#ff9500]" }, 
-    { title: "Mobility Technologies", icon: <Cpu size={32}/>, color: "from-[#0071e3] to-[#5ac8fa]" }, 
-    { title: "Vehicular Systems", icon: <Settings size={32}/>, color: "from-[#5856d6] to-[#af52de]" }, 
-    { title: "Policy & Economics", icon: <Scale size={32}/>, color: "from-[#8e8e93] to-[#1d1d1f]" }, 
-    { title: "Safety & Autonomy", icon: <ShieldCheck size={32}/>, color: "from-[#ff2d55] to-[#ff3b30]" }, 
-    { title: "Smart Infrastructure", icon: <Building2 size={32}/>, color: "from-[#34c759] to-[#0071e3]" }, 
-    { title: "Logistics & Supply", icon: <Truck size={32}/>, color: "from-[#ff9500] to-[#ffcc00]" }, 
-    { title: "Urban & Sustainable", icon: <Leaf size={32}/>, color: "from-[#28cd41] to-[#34c759]" }, 
-    { title: "Transport Planning", icon: <Workflow size={32}/>, color: "from-[#00c7be] to-[#0071e3]" }, 
-    { title: "Data Science & AI", icon: <BrainCircuit size={32}/>, color: "from-[#af52de] to-[#0071e3]" }  
+    { title: "Energy for Mobility", icon: <Zap size={24}/>, desc: "Hydrogen fuel cells, battery ecosystems, and clean propulsion.", color: "from-[#ff3b30] to-[#ff9500]" }, 
+    { title: "Mobility Technologies", icon: <Cpu size={24}/>, desc: "Connected sensors, IoT integration, and smart vehicle hardware.", color: "from-[#0071e3] to-[#5ac8fa]" }, 
+    { title: "Vehicular Systems", icon: <Settings size={24}/>, desc: "Advanced engineering, aerodynamics, and structural dynamics.", color: "from-[#5856d6] to-[#af52de]" }, 
+    { title: "Policy & Economics", icon: <Scale size={24}/>, desc: "Global standards, market models, and regulatory frameworks.", color: "from-[#8e8e93] to-[#1d1d1f]" }, 
+    { title: "Safety & Autonomy", icon: <ShieldCheck size={24}/>, desc: "AI-driven safety, V2X, and autonomous navigation protocols.", color: "from-[#ff2d55] to-[#ff3b30]" }, 
+    { title: "Smart Infrastructure", icon: <Building2 size={24}/>, desc: "Intelligent roads, futuristic hubs, and transit facility design.", color: "from-[#34c759] to-[#0071e3]" }, 
+    { title: "Logistics 4.0", icon: <Truck size={24}/>, desc: "Automated delivery, freight management, and warehouse robotics.", color: "from-[#ff9500] to-[#ffcc00]" }, 
+    { title: "Urban & Sustainable", icon: <Leaf size={24}/>, desc: "Low-carbon behavior, green urbanism, and transit-oriented development.", color: "from-[#28cd41] to-[#34c759]" }, 
+    { title: "Integrated Planning", icon: <Workflow size={24}/>, desc: "Holistic modeling of urban spaces and transportation layers.", color: "from-[#00c7be] to-[#0071e3]" }, 
+    { title: "Data Science & AI", icon: <BrainCircuit size={24}/>, desc: "Big data analytics and predictive modeling for transit networks.", color: "from-[#af52de] to-[#0071e3]" }  
+  ];
+
+  const faqs = [
+    { q: "What is the core focus of ICFMS 2027?", a: "The conference focuses on architecting future mobility through clean energy, autonomous intelligence, and sustainable urban transit systems." },
+    { q: "How can I participate as a delegate?", a: "Registration will open following the abstract acceptance phase. Please stay tuned to our official portal for the live link." },
+    { q: "Are there publication opportunities?", a: "Yes, selected high-quality papers will be fast-tracked for publication in Top Tier Special Issue Journals." }
   ];
 
   return (
@@ -132,21 +138,22 @@ const App = () => {
       <motion.div className="fixed top-0 left-0 right-0 h-[4px] bg-[#0071e3] origin-left z-[2000]" style={{ scaleX }} />
 
       {/* --- NAVIGATION --- */}
-      <nav className={`fixed w-full z-[1000] transition-all duration-500 border-b ${scrolled ? 'bg-white/95 backdrop-blur-xl border-black/10 py-3 shadow-sm' : 'bg-white md:bg-transparent border-transparent py-6'}`}>
-        <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center">
+      <nav className={`fixed w-full z-[1500] transition-all duration-500 border-b ${scrolled ? 'bg-white/95 backdrop-blur-xl border-black/10 py-3 shadow-sm' : 'bg-white border-transparent py-4 md:py-8'}`}>
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <a href="#" className="h-10 md:h-12 block">
+            <a href="#" className="h-10 md:h-12 block transition-transform hover:scale-105 active:scale-95">
               <img src={imgPath.logo} alt="IIT KGP" className="h-full w-auto object-contain" />
             </a>
             <div className="hidden sm:block border-l border-black/10 pl-4 h-6">
-              <p className="text-[14px] font-bold text-[#1d1d1f] tracking-tight flex items-center h-full">ICFMS 2027</p>
+              <p className="text-[14px] font-bold text-[#1d1d1f] tracking-tight leading-none h-full flex items-center uppercase">ICFMS 2027</p>
             </div>
           </div>
 
           <div className="hidden lg:flex items-center gap-10">
-            {['Heritage', 'Themes', 'Dates', 'Venue'].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="text-[13px] font-semibold text-[#1d1d1f] hover:text-[#0071e3] transition-colors">
+            {['Heritage', 'About', 'Themes', 'Dates', 'Venue'].map((link) => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-[13px] font-semibold text-[#1d1d1f] hover:text-[#0071e3] transition-colors relative group">
                 {link}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#0071e3] transition-all group-hover:w-full"></span>
               </a>
             ))}
             <button onClick={handleSubmission} className="bg-[#0071e3] text-white text-[13px] px-6 py-2.5 rounded-full font-bold hover:bg-[#0077ed] transition-all active:scale-95 shadow-md">
@@ -163,47 +170,31 @@ const App = () => {
       {/* --- MOBILE NAV OVERLAY --- */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[950] bg-white pt-32 px-10 flex flex-col gap-10"
-          >
-            {['Heritage', 'Themes', 'Dates', 'Venue'].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="text-4xl font-bold text-[#1d1d1f] border-b border-black/5 pb-4" onClick={() => setIsMenuOpen(false)}>
-                {link}
-              </a>
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="fixed inset-0 z-[1400] bg-white pt-24 px-10 flex flex-col gap-10">
+            {['Heritage', 'About', 'Themes', 'Dates', 'Venue'].map((link) => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-4xl font-bold text-[#1d1d1f] border-b border-black/5 pb-4" onClick={() => setIsMenuOpen(false)}>{link}</a>
             ))}
-            <button onClick={handleSubmission} className="bg-[#0071e3] text-white py-6 rounded-2xl font-bold text-xl shadow-lg">
-              Submit Abstract
-            </button>
+            <button onClick={handleSubmission} className="bg-[#0071e3] text-white py-6 rounded-2xl font-bold text-xl shadow-lg">Submit Abstract</button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* --- HERO SECTION --- */}
-      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-40 md:pt-48 pb-20">
+      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 md:pt-48 pb-20">
         <div className="max-w-[1200px] mx-auto w-full text-center space-y-12">
           <div className="space-y-6">
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#0071e3] font-bold text-sm md:text-lg uppercase tracking-[0.3em]">
               IIT KHARAGPUR PRESENTS
             </motion.p>
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              className="text-[#1d1d1f] text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[1.05]"
-            >
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-[#1d1d1f] text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[1.05]">
               The International Conference on <br className="hidden md:block" /> Future Mobility Systems.
             </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="text-[#424245] text-xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed"
-            >
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8 }} className="text-[#424245] text-xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed">
               Innovating human movement through the intelligent convergence <br className="hidden md:block" /> of energy, data, and autonomous systems.
             </motion.p>
           </div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row justify-center items-center gap-10"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row justify-center items-center gap-8">
             <button onClick={handleSubmission} className="bg-[#0071e3] text-white px-14 py-5 rounded-full font-bold text-xl hover:bg-[#0077ed] transition-all flex items-center gap-3 shadow-xl">
               Submit Abstract <ArrowRight size={24} />
             </button>
@@ -213,11 +204,8 @@ const App = () => {
             </div>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 1 }}
-            className="mt-20 rounded-[3.5rem] overflow-hidden shadow-2xl border border-black/5 bg-slate-100"
-          >
-            <img src={imgPath.hero} alt="IIT Kharagpur Main Building" className="w-full h-auto object-cover min-h-[300px]" />
+          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 1.2 }} className="mt-16 rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl border border-black/5 bg-slate-100 aspect-[4/3] md:aspect-[21/9]">
+            <img src={imgPath.hero} alt="IIT Kharagpur Main Building" className="w-full h-full object-cover" />
           </motion.div>
         </div>
       </section>
@@ -225,39 +213,32 @@ const App = () => {
       {/* --- STATS BENTO GRID --- */}
       <section className="py-20 bg-[#f5f5f7]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
-              <Award className="text-[#0071e3] mb-6" size={40} />
-              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">First Mobility Conference</p>
-              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">In the region</p>
-            </div>
-            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
-              <Workflow className="text-[#34c759] mb-6" size={40} />
-              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">10+ Conference Tracks</p>
-              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">Scientific Scope</p>
-            </div>
-            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
-              <Users className="text-[#5856d6] mb-6" size={40} />
-              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">500+ Target Delegates</p>
-              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">Global Network</p>
-            </div>
-            <div className="bg-[#0071e3] p-10 rounded-[2.5rem] shadow-xl flex flex-col justify-between text-white">
-              <Book className="text-white mb-6" size={40} />
-              <p className="text-2xl font-bold leading-tight">Top Tier Special Issue Journals</p>
-              <p className="text-white/60 text-xs mt-4 font-bold uppercase tracking-widest leading-none">Publication Partner</p>
-            </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { icon: <Award className="text-[#0071e3]" size={32}/>, title: "First Mobility Conference", sub: "Regional Premiere" },
+              { icon: <Workflow className="text-[#34c759]" size={32}/>, title: "10+ Tracks", sub: "Scientific Matrix" },
+              { icon: <Users className="text-[#5856d6]" size={32}/>, title: "500+ Delegates", sub: "Global Network" },
+              { icon: <Book className="text-white" size={32}/>, title: "Top Tier Journals", sub: "Publication Hub", dark: true }
+            ].map((stat, i) => (
+              <div key={i} className={`${stat.dark ? 'bg-[#0071e3] text-white shadow-xl' : 'bg-white text-[#1d1d1f] shadow-sm'} p-6 md:p-10 rounded-[2.5rem] flex flex-col justify-between border border-black/5 transition-transform hover:scale-[1.02]`}>
+                <div className="mb-6">{stat.icon}</div>
+                <div>
+                  <p className="text-xl md:text-2xl font-bold tracking-tight leading-none">{stat.title}</p>
+                  <p className={`${stat.dark ? 'text-white/60' : 'text-[#86868b]'} text-[10px] mt-4 font-bold uppercase tracking-widest`}>{stat.sub}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* --- COUNTDOWN TRACKER --- */}
-      <section className="py-24 md:py-32 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-[1200px] mx-auto px-6 text-center space-y-16">
           <div className="space-y-4">
             <p className="text-[#0071e3] font-bold text-sm uppercase tracking-widest">Action Deadline</p>
-            <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-[#1d1d1f]">Abstract Submission Closes In</h3>
+            <h3 className="text-4xl md:text-7xl font-bold tracking-tight text-[#1d1d1f]">Submission Closes In.</h3>
           </div>
-          
           <div className="flex flex-wrap justify-center gap-4 md:gap-10">
             {[
               { label: 'Days', value: timeLeft.days },
@@ -265,89 +246,76 @@ const App = () => {
               { label: 'Minutes', value: timeLeft.minutes },
               { label: 'Seconds', value: timeLeft.seconds }
             ].map((unit, i) => (
-              <div key={i} className="bg-[#f5f5f7] w-32 h-32 md:w-48 md:h-48 rounded-[3rem] flex flex-col items-center justify-center shadow-sm border border-black/5 group hover:bg-white hover:shadow-xl transition-all">
-                <span className="text-4xl md:text-7xl font-bold tracking-tighter text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">{String(unit.value).padStart(2, '0')}</span>
-                <span className="text-[#86868b] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-2">{unit.label}</span>
+              <div key={i} className="bg-[#f5f5f7] w-28 h-28 sm:w-36 sm:h-36 md:w-52 md:h-52 rounded-[2rem] md:rounded-[3.5rem] flex flex-col items-center justify-center shadow-sm border border-black/5 group hover:bg-white hover:shadow-2xl transition-all duration-500">
+                <span className="text-3xl md:text-7xl font-bold tracking-tighter text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">{String(unit.value).padStart(2, '0')}</span>
+                <span className="text-[#86868b] text-[9px] md:text-xs font-bold uppercase tracking-widest mt-2">{unit.label}</span>
               </div>
             ))}
-          </div>
-          
-          <div className="pt-8">
-            <button onClick={handleSubmission} className="bg-[#1d1d1f] text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-black transition-all shadow-2xl">
-              Secure Your Spot Now
-            </button>
           </div>
         </div>
       </section>
 
       {/* --- PLATINUM JUBILEE --- */}
-      <section id="heritage" className="py-24 md:py-52 bg-[#f5f5f7] relative">
-        <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+      <section id="heritage" className="py-24 md:py-60 bg-[#f5f5f7] relative overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center">
            <div className="space-y-12">
               <div className="space-y-6">
-                <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">75 Golden Years</h2>
-                <h3 className="text-[#1d1d1f] text-6xl md:text-8xl font-bold tracking-tight leading-none">Platinum <br /> Jubilee.</h3>
+                <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">Historic 75 Years</h2>
+                <h3 className="text-[#1d1d1f] text-6xl md:text-9xl font-bold tracking-tight leading-none text-[#1d1d1f]">Platinum <br /> Jubilee.</h3>
               </div>
-              <div className="bg-white p-10 md:p-14 rounded-[3rem] border border-black/5 shadow-sm">
-                 <p className="text-[#1d1d1f] text-2xl md:text-4xl font-bold leading-tight italic mb-8">
+              <div className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-black/5 shadow-sm">
+                 <p className="text-[#1d1d1f] text-2xl md:text-5xl font-bold leading-tight italic mb-10">
                    "August 18, 2025 – August 18, 2027. Dedicated to the service of the nation."
                  </p>
-                 <p className="text-[#424245] text-xl leading-relaxed font-medium">Celebrating three-quarters of a century defined by innovation, heritage, and global leadership.</p>
+                 <p className="text-[#424245] text-xl leading-relaxed font-medium">Marking three-quarters of a century defined by innovation, excellence, and global academic leadership.</p>
               </div>
            </div>
-           <div className="flex justify-center">
-              <motion.div 
-                whileInView={{ scale: 1 }} initial={{ scale: 0.9 }} transition={{ duration: 0.8 }}
-                className="bg-white rounded-[5rem] p-20 md:p-32 shadow-2xl border border-black/5 flex items-center justify-center max-w-lg w-full relative"
-              >
-                 <img src={imgPath.logo} alt="Anniversary Logo" className="w-full h-auto" />
-                 <div className="absolute -bottom-8 -right-8 bg-[#0071e3] text-white p-10 rounded-[3rem] shadow-2xl">
-                    <p className="text-7xl font-bold italic leading-none">75</p>
-                 </div>
+           <div className="flex justify-center relative">
+              <motion.div whileInView={{ scale: 1 }} initial={{ scale: 0.9 }} transition={{ duration: 0.8 }} className="bg-white rounded-[6rem] p-16 md:p-28 shadow-2xl border border-black/5 flex items-center justify-center max-w-lg w-full relative">
+                 <img src={imgPath.logo} alt="PJ Logo" className="w-full h-auto" />
+                 <div className="absolute -bottom-8 -right-8 bg-[#0071e3] text-white p-10 rounded-[3rem] shadow-2xl"><p className="text-6xl font-bold italic leading-none">75</p></div>
               </motion.div>
            </div>
         </div>
       </section>
 
       {/* --- ABOUT SECTION --- */}
-      <section id="about" className="py-24 md:py-48 bg-white">
+      <section id="about" className="py-24 md:py-48 bg-white scroll-mt-20">
         <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-16 md:gap-24 items-center">
            <div className="space-y-10">
-              <h2 className="text-[#1d1d1f] text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">The First IIT. <br /> <span className="text-[#86868b]">Mother of Innovation.</span></h2>
+              <h2 className="text-[#1d1d1f] text-5xl md:text-8xl font-bold tracking-tight leading-[1.1]">The Mother of <br /> <span className="text-[#86868b]">Indian Innovation.</span></h2>
               <p className="text-[#1d1d1f] text-xl md:text-2xl leading-relaxed font-light">
-                Established in 1951, IIT Kharagpur is the pioneer of technical education in India. Born from the site of the Hijli Detention Camp, it remains the most diversified institute in the nation.
+                Established in 1951, IIT Kharagpur is the cradle of technical education in India. Born from the site of the Hijli Detention Camp, it remains the most diversified institute merging heritage with global research.
               </p>
-              <button onClick={() => window.open("https://www.iitkgp.ac.in/about-iitkgp")} className="bg-[#1d1d1f] text-white px-10 py-4 rounded-full font-bold hover:bg-black transition-all inline-flex items-center gap-3">
-                 Explore History <ExternalLink size={18}/>
+              <button onClick={() => window.open("https://www.iitkgp.ac.in/about-iitkgp")} className="bg-[#1d1d1f] text-white px-10 py-4 rounded-full font-bold hover:bg-black transition-all inline-flex items-center gap-3 shadow-md">
+                 Explore Institutional History <ExternalLink size={18}/>
               </button>
            </div>
-           <div className="rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
+           <div className="rounded-[3.5rem] overflow-hidden shadow-2xl border-8 border-[#f5f5f7]">
               <img src={imgPath.architecture} alt="Defining Smart Mobility" className="w-full h-auto object-cover" />
            </div>
         </div>
       </section>
 
-      {/* --- THEMES: VIBRANT BENTO GRID --- */}
-      <section id="themes" className="py-24 md:py-52 bg-white">
+      {/* --- THEMES: VIBRANT BENTO --- */}
+      <section id="themes" className="py-24 md:py-48 bg-white scroll-mt-20">
         <div className="max-w-[1200px] mx-auto px-6">
           <div className="mb-24 space-y-4 text-center lg:text-left">
-            <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">Scientific Core</h2>
-            <h3 className="text-[#1d1d1f] text-5xl md:text-8xl font-bold tracking-tight">Conference Tracks.</h3>
+            <h2 className="text-[#0071e3] font-bold text-sm uppercase tracking-widest">Scientific Core</h2>
+            <h3 className="text-5xl md:text-8xl font-bold tracking-tight text-[#1d1d1f]">Conference Themes.</h3>
+            <p className="text-[#86868b] text-xl max-w-2xl font-light italic">Converging energy, intelligence, and sustainable urban modeling.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {themes.map((t, idx) => (
-              <motion.div 
-                whileHover={{ y: -12, scale: 1.02 }}
-                key={idx} 
-                className={`p-10 rounded-[3.5rem] bg-gradient-to-br ${t.color} flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all cursor-default min-h-[350px] relative overflow-hidden`}
-              >
-                <div className="absolute top-[-10%] right-[-10%] w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform" />
-                <div className="text-white drop-shadow-md">{t.icon}</div>
+              <motion.div key={idx} whileHover={{ y: -10 }} className={`p-8 rounded-[3rem] bg-gradient-to-br ${t.color} flex flex-col justify-between min-h-[350px] shadow-lg group relative overflow-hidden`}>
+                <div className="absolute top-[-5%] right-[-5%] w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform" />
+                <div className="text-white">{t.icon}</div>
                 <div className="space-y-4">
-                  <h3 className="text-white text-2xl font-bold tracking-tight leading-tight drop-shadow-md">{t.title}</h3>
-                  <div className="h-1 w-12 bg-white/30 rounded-full" />
-                  <p className="text-white/80 text-[11px] font-bold uppercase tracking-widest">Scientific Theme {idx + 1}</p>
+                  <h3 className="text-white text-xl md:text-2xl font-bold tracking-tight leading-tight">{t.title}</h3>
+                  <p className="text-white/70 text-xs md:text-sm font-medium leading-relaxed">{t.desc}</p>
+                  <div className="h-[1px] w-12 bg-white/30 rounded-full" />
+                  <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest">Track {idx + 1}</p>
                 </div>
               </motion.div>
             ))}
@@ -356,7 +324,7 @@ const App = () => {
       </section>
 
       {/* --- TIMELINE --- */}
-      <section id="dates" className="py-24 md:py-48 bg-[#f5f5f7]">
+      <section id="dates" className="py-24 md:py-48 bg-[#f5f5f7] scroll-mt-20">
         <div className="max-w-[1000px] mx-auto px-6 space-y-24">
            <h2 className="text-[#1d1d1f] text-6xl md:text-9xl font-bold text-center tracking-tighter">Key Dates.</h2>
            <div className="space-y-6">
@@ -365,7 +333,7 @@ const App = () => {
                 { l: "Abstract Submission Deadline", d: "15 May 2026", active: true },
                 { l: "Acceptance Notification", d: "30 Jun 2026", active: false },
                 { l: "Full Paper Submission", d: "01 Aug 2026", active: false },
-                { l: "Final Decision", d: "01 Oct 2026", active: false }
+                { l: "Final Decision Notification", d: "01 Oct 2026", active: false }
               ].map((item, i) => (
                 <div key={i} className="bg-white p-12 md:p-16 rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center group border border-transparent hover:border-black/5 transition-all shadow-sm">
                    <div className="text-center md:text-left mb-6 md:mb-0 text-left">
@@ -379,23 +347,46 @@ const App = () => {
         </div>
       </section>
 
+      {/* --- FAQ SECTION --- */}
+      <section className="py-24 md:py-48 bg-white">
+        <div className="max-w-[800px] mx-auto px-6">
+           <h3 className="text-5xl md:text-8xl font-bold tracking-tighter text-center mb-24 text-[#1d1d1f]">Common Questions.</h3>
+           <div className="space-y-4">
+              {faqs.map((faq, i) => (
+                <div key={i} className="bg-[#f5f5f7] rounded-3xl overflow-hidden border border-black/5">
+                   <button onClick={() => setActiveFaq(activeFaq === i ? null : i)} className="w-full p-8 md:p-10 flex justify-between items-center text-left hover:bg-[#e8e8ed] transition-colors">
+                      <span className="text-xl md:text-2xl font-bold text-[#1d1d1f]">{faq.q}</span>
+                      {activeFaq === i ? <ChevronUp size={24} color="#0071e3"/> : <Plus size={24} color="#86868b"/>}
+                   </button>
+                   <AnimatePresence>
+                      {activeFaq === i && (
+                        <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="px-10 pb-10 overflow-hidden">
+                           <p className="text-lg text-[#424245] leading-relaxed font-medium pt-6 border-t border-black/5">{faq.a}</p>
+                        </motion.div>
+                      )}
+                   </AnimatePresence>
+                </div>
+              ))}
+           </div>
+        </div>
+      </section>
+
       {/* --- VENUE --- */}
-      <section id="venue" className="py-24 md:py-48 bg-white">
+      <section id="venue" className="py-24 md:py-48 bg-[#f5f5f7] scroll-mt-20">
         <div className="max-w-[1200px] mx-auto px-6">
            <div className="bg-[#1d1d1f] rounded-[4rem] overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[650px] shadow-3xl">
-              <div className="lg:w-3/5 p-16 md:p-28 flex flex-col justify-center space-y-12">
-                 <div className="space-y-6">
+              <div className="lg:w-3/5 p-12 md:p-28 flex flex-col justify-center space-y-12">
+                 <div className="space-y-8">
                     <span className="bg-[#0071e3] text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest inline-block shadow-lg">The Research Park</span>
                     <h2 className="text-7xl md:text-[130px] font-bold text-white tracking-tighter italic leading-none">Kolkata.</h2>
                  </div>
-                 <div className="space-y-8 border-l-8 border-[#0071e3] pl-12 text-left">
-                    <p className="text-white text-5xl font-bold uppercase tracking-tight italic">Innovation Hub</p>
+                 <div className="space-y-8 border-l-[12px] border-[#0071e3] pl-12 text-left text-white">
+                    <p className="text-white text-3xl md:text-5xl font-bold uppercase tracking-tight italic">Innovation Hub</p>
                     <p className="text-[#86868b] text-2xl leading-relaxed max-w-lg font-medium">
-                      Newtown, West Bengal. <br /> 
-                      A world-class technical cluster hosting the global nexus of Future Mobility.
+                      Newtown, West Bengal. A world-class technical cluster hosting the global nexus of Future Mobility.
                     </p>
                  </div>
-                 <button onClick={() => window.open("https://maps.app.goo.gl/JmFBsApsZ6si41WSA", "_blank")} className="bg-white text-black w-fit px-16 py-6 rounded-full font-bold text-xl hover:bg-[#0071e3] hover:text-white transition-all shadow-2xl active:scale-95">
+                 <button onClick={() => window.open("https://maps.app.goo.gl/JmFBsApsZ6si41WSA", "_blank")} className="bg-white text-black w-fit px-16 py-6 rounded-full font-bold text-xl hover:bg-[#0071e3] hover:text-white transition-all shadow-xl active:scale-95">
                     View Directions
                  </button>
               </div>
@@ -407,38 +398,38 @@ const App = () => {
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="bg-white pt-40 pb-16 border-t border-black/5 relative z-10">
+      <footer className="bg-white pt-48 pb-16 border-t border-black/5 relative z-10">
         <div className="max-w-[1200px] mx-auto px-6 text-[#1d1d1f]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40">
              <div className="space-y-10 text-left">
-                <img src={imgPath.logo} alt="ICFMS Logo" className="h-20 w-auto" />
+                <img src={imgPath.logo} alt="ICFMS" className="h-20 w-auto" />
                 <div className="space-y-4">
-                  <p className="text-[#1d1d1f] text-4xl font-bold tracking-tighter uppercase leading-none">योगः कर्मसु कौशलम्</p>
-                  <p className="text-[#0071e3] text-sm font-bold uppercase tracking-widest">Excellence in Action is Yoga.</p>
+                  <p className="text-[#1d1d1f] text-4xl font-bold tracking-tighter uppercase leading-none italic">योगः कर्मसु कौशलम्</p>
+                  <p className="text-sm font-bold text-[#0071e3] uppercase tracking-widest">Excellence in Action is Yoga.</p>
                 </div>
-                <p className="text-[#424245] text-xl font-medium italic leading-relaxed">"Dedicated to the service of the nation since 1951."</p>
+                <p className="text-xl text-[#424245] font-medium italic leading-relaxed">"Dedicated to the service of the nation since 1951."</p>
              </div>
              
              <div className="lg:col-span-2 space-y-12 text-left">
                 <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Official Correspondence</h5>
                 <div className="space-y-6">
                    <p className="text-[#1d1d1f] text-5xl font-bold tracking-tighter leading-none">Prof Arkopal K. Goswami, PhD</p>
-                   <div className="space-y-2 pt-2">
-                      <p className="text-[#1d1d1f] font-bold text-xl">Associate Professor, RCGSIDM</p>
-                      <p className="text-[#86868b] text-lg font-medium uppercase tracking-widest leading-relaxed">Associate Dean, International Relations <br /> IIT Kharagpur</p>
+                   <div className="space-y-2 pt-2 text-xl font-semibold">
+                      <p className="text-[#1d1d1f]">Associate Professor, RCGSIDM</p>
+                      <p className="text-[#86868b] leading-relaxed uppercase text-[15px] tracking-widest">Associate Dean, International Relations <br /> IIT Kharagpur</p>
                    </div>
                 </div>
                 <div className="flex flex-wrap gap-10">
-                   <a href="mailto:icfms.iitkgp@gmail.com" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8 flex items-center gap-4">icfms.iitkgp@gmail.com <Mail size={22}/></a>
-                   <a href="https://www.mustlab.in/" target="_blank" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8 flex items-center gap-4">mustlab.in <Globe size={22}/></a>
+                   <a href="mailto:icfms.iitkgp@gmail.com" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8">icfms.iitkgp@gmail.com</a>
+                   <a href="https://www.mustlab.in/" target="_blank" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8">mustlab.in</a>
                 </div>
              </div>
 
              <div className="space-y-12 text-left">
                 <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Resources</h5>
-                <ul className="space-y-6 text-[#1d1d1f] text-lg font-semibold">
-                   <li><a href="https://www.iitkgp.ac.in" className="hover:text-[#0071e3] transition-colors">Institute Portal</a></li>
-                   <li><a href="#" className="hover:text-[#0071e3] transition-colors">Anniversary Hub</a></li>
+                <ul className="space-y-6 text-[#1d1d1f] text-xl font-bold">
+                   <li><a href="https://www.iitkgp.ac.in" className="hover:text-[#0071e3] transition-colors decoration-2 underline-offset-4">Institute Portal</a></li>
+                   <li><a href="#" className="hover:text-[#0071e3] transition-colors decoration-2 underline-offset-4">Anniversary Gallery</a></li>
                 </ul>
              </div>
           </div>
@@ -448,8 +439,8 @@ const App = () => {
                 &copy; 2027 ICFMS | Indian Institute of Technology Kharagpur <br /> 
                 A Global Forum on the Future of Human Mobility.
              </div>
-             <div className="text-[18px] text-[#1d1d1f] font-bold flex items-center gap-4">
-                Made with love <Heart size={24} className="text-red-500 fill-current animate-pulse" /> by <a href="https://kapil2020.github.io/website" target="_blank" className="text-[#0071e3] hover:underline underline-offset-8">Kapil</a>
+             <div className="text-[20px] text-[#1d1d1f] font-bold flex items-center gap-4 group">
+                Made with love <Heart size={26} className="text-red-500 fill-current animate-pulse group-hover:scale-125 transition-transform" /> by <a href="https://kapil2020.github.io/website" target="_blank" className="text-[#0071e3] hover:underline underline-offset-8">Kapil</a>
              </div>
           </div>
         </div>
@@ -461,7 +452,7 @@ const App = () => {
         ::-webkit-scrollbar-track { background: #ffffff; }
         ::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 10px; border: 3px solid #ffffff; }
         ::-webkit-scrollbar-thumb:hover { background: #86868b; }
-        img { max-width: 100%; height: auto; }
+        img { max-width: 100%; height: auto; display: block; }
       `}} />
     </div>
   );
