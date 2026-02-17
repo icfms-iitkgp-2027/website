@@ -1,494 +1,467 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { motion, AnimatePresence, useScroll, useSpring, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { 
   Calendar, MapPin, Mail, Globe, Zap, Cpu, Truck, ShieldCheck, 
-  Leaf, Settings, BarChart, Facebook, Twitter, Linkedin, Instagram, 
-  Youtube, Layers, ArrowRight, CheckCircle2, Timer, Navigation as MapNavigation, 
-  Heart, Building2, Mic2, BookOpen, Bell, Scale, BrainCircuit, Workflow, X, Menu, ExternalLink
+  Leaf, Settings, ArrowRight, Navigation as MapNavigation, 
+  Heart, Building2, BookOpen, Bell, Scale, BrainCircuit, Workflow, X, Menu, ExternalLink,
+  Facebook, Twitter, Linkedin, Timer, Award, Users, Book
 } from 'lucide-react';
 
 /**
- * ICFMS 2027 - PREMIER FUTURISTIC INTERFACE
- * Version 4.2: Direct Submission Redirection, Updated Nav Actions, Enhanced Spacing
+ * ICFMS 2027 - THE OFFICIAL INTERFACE
+ * Version 10.2: Final Stability & Syntax Fix
+ * Design: Apple Aesthetic, Bento Stats, Submission Countdown
  */
 
-// --- 3D WEBGL PARTICLE ENVIRONMENT ---
+// --- SUBTLE AMBIENT BACKGROUND ---
 const TechCanvas = () => {
   const mountRef = useRef(null);
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mountRef.current.appendChild(renderer.domElement);
-
-    const particlesGeometry = new THREE.BufferGeometry();
-    const count = 1800;
-    const posArray = new Float32Array(count * 3);
-    for (let i = 0; i < count * 3; i++) posArray[i] = (Math.random() - 0.5) * 90;
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.07,
-      color: '#60a5fa',
-      transparent: true,
-      opacity: 0.3,
-      blending: THREE.AdditiveBlending
-    });
-
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    camera.position.z = 35;
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      particlesMesh.rotation.y += 0.0006;
-      particlesMesh.rotation.x += 0.0003;
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+    if (!mountRef.current) return;
+    try {
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
-    };
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mountRef.current.appendChild(renderer.domElement);
+
+      const particlesGeometry = new THREE.BufferGeometry();
+      const count = 400; 
+      const posArray = new Float32Array(count * 3);
+      for (let i = 0; i < count * 3; i++) posArray[i] = (Math.random() - 0.5) * 80;
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.1,
+        color: '#0071e3',
+        transparent: true,
+        opacity: 0.1,
+      });
+
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+      camera.position.z = 30;
+
+      const animate = () => {
+        requestAnimationFrame(animate);
+        particlesMesh.rotation.y += 0.0002;
+        renderer.render(scene, camera);
+      };
+      animate();
+
+      const handleResize = () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        if (mountRef.current && renderer.domElement) mountRef.current.removeChild(renderer.domElement);
+        renderer.dispose();
+      };
+    } catch (e) {
+      console.error("Three.js initialization failed", e);
+    }
   }, []);
-  return <div ref={mountRef} className="fixed inset-0 z-0 pointer-events-none opacity-40" />;
+  
+  return <div ref={mountRef} className="fixed inset-0 z-[-1] pointer-events-none bg-white" />;
 };
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   const FORM_URL = "https://forms.gle/2ejuthB7udhpyVYL8";
-
   const imgPath = {
     logo: "https://raw.githubusercontent.com/kapil2020/web/main/logo%20pj.png",
-    hero: "https://raw.githubusercontent.com/kapil2020/web/main/carousel-2.jpg.png",
+    hero: "https://raw.githubusercontent.com/kapil2020/web/main/carousel-2.jpg.png", 
     venue: "https://raw.githubusercontent.com/kapil2020/web/main/venue1.jpg",
     architecture: "https://raw.githubusercontent.com/kapil2020/web/main/Gallery/MobilityAI1_Cover.png?raw=true",
   };
 
-  const handleSubmissionRedirect = () => {
-    window.open(FORM_URL, '_blank', 'noopener,noreferrer');
-  };
+  const handleSubmission = () => window.open(FORM_URL, '_blank', 'noopener,noreferrer');
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const target = new Date("2026-05-15T23:59:59").getTime();
-      const diff = target - new Date().getTime();
+      const targetDate = new Date("2026-05-15T23:59:59").getTime();
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
       if (diff > 0) {
         setTimeLeft({
-          days: Math.floor(diff / 86400000),
-          hours: Math.floor((diff / 3600000) % 24),
-          minutes: Math.floor((diff / 60000) % 60),
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((diff / 1000 / 60) % 60),
           seconds: Math.floor((diff / 1000) % 60),
         });
       }
     }, 1000);
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
-    return () => { clearInterval(timer); window.removeEventListener('scroll', handleScroll); };
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const themes = [
-    { title: "Energy for Mobility", icon: <Zap />, color: "from-cyan-500/20 to-blue-500/10", border: "border-cyan-500/30", text: "text-cyan-400" },
-    { title: "Mobility Technologies", icon: <Cpu />, color: "from-indigo-500/20 to-purple-500/10", border: "border-indigo-500/30", text: "text-indigo-400" },
-    { title: "Vehicular Technology", icon: <Settings />, color: "from-blue-600/20 to-cyan-400/10", border: "border-blue-500/30", text: "text-blue-400" },
-    { title: "Policy & Economics", icon: <Scale />, color: "from-purple-600/20 to-pink-500/10", border: "border-purple-500/30", text: "text-purple-400" },
-    { title: "Traffic & Autonomy", icon: <ShieldCheck />, color: "from-red-500/20 to-orange-500/10", border: "border-red-500/30", text: "text-red-400" },
-    { title: "Smart Infrastructure", icon: <Building2 />, color: "from-emerald-500/20 to-teal-500/10", border: "border-emerald-500/30", text: "text-emerald-400" },
-    { title: "Logistics & Supply", icon: <Truck />, color: "from-orange-500/20 to-yellow-500/10", border: "border-orange-500/30", text: "text-orange-400" },
-    { title: "Urban & Sustainable", icon: <Leaf />, color: "from-green-500/20 to-emerald-500/10", border: "border-green-500/30", text: "text-green-400" },
-    { title: "Integrated Planning", icon: <Workflow />, color: "from-cyan-500/20 to-indigo-500/10", border: "border-cyan-500/30", text: "text-cyan-400" },
-    { title: "Data Science & AI", icon: <BrainCircuit />, color: "from-fuchsia-500/20 to-pink-500/10", border: "border-fuchsia-500/30", text: "text-fuchsia-400" }
+    { title: "Energy for Mobility", icon: <Zap size={32}/>, color: "from-[#ff3b30] to-[#ff9500]" }, 
+    { title: "Mobility Technologies", icon: <Cpu size={32}/>, color: "from-[#0071e3] to-[#5ac8fa]" }, 
+    { title: "Vehicular Systems", icon: <Settings size={32}/>, color: "from-[#5856d6] to-[#af52de]" }, 
+    { title: "Policy & Economics", icon: <Scale size={32}/>, color: "from-[#8e8e93] to-[#1d1d1f]" }, 
+    { title: "Safety & Autonomy", icon: <ShieldCheck size={32}/>, color: "from-[#ff2d55] to-[#ff3b30]" }, 
+    { title: "Smart Infrastructure", icon: <Building2 size={32}/>, color: "from-[#34c759] to-[#0071e3]" }, 
+    { title: "Logistics & Supply", icon: <Truck size={32}/>, color: "from-[#ff9500] to-[#ffcc00]" }, 
+    { title: "Urban & Sustainable", icon: <Leaf size={32}/>, color: "from-[#28cd41] to-[#34c759]" }, 
+    { title: "Transport Planning", icon: <Workflow size={32}/>, color: "from-[#00c7be] to-[#0071e3]" }, 
+    { title: "Data Science & AI", icon: <BrainCircuit size={32}/>, color: "from-[#af52de] to-[#0071e3]" }  
   ];
 
   return (
-    <div className="min-h-screen bg-[#020617] font-sans text-slate-200 selection:bg-blue-500 overflow-x-hidden">
+    <div className="min-h-screen bg-white font-sans text-[#1d1d1f] selection:bg-blue-100 overflow-x-hidden">
       <TechCanvas />
       
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-600 origin-left z-[1000]" style={{ scaleX }} />
-
-      {/* --- COMING SOON MODAL --- */}
-      <AnimatePresence>
-        {showModal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[600] flex items-center justify-center px-4">
-            <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={() => setShowModal(false)}></div>
-            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} className="relative bg-slate-900 border border-blue-500/30 p-10 rounded-[3rem] max-w-lg w-full shadow-2xl">
-              <button onClick={() => setShowModal(false)} className="absolute top-8 right-8 text-slate-500 hover:text-white transition-colors"><X size={32}/></button>
-              <div className="text-center space-y-8">
-                <div className="w-24 h-24 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto border border-blue-500/20"><Bell className="w-12 h-12 text-blue-500 animate-bounce" /></div>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none">Official Notice</h3>
-                <p className="text-slate-400 text-lg">Detailed event documentation and schedules are currently being updated. The submission link is now live.</p>
-                <button onClick={() => { setShowModal(false); handleSubmissionRedirect(); }} className="py-4 px-8 bg-blue-600 rounded-2xl text-white font-bold uppercase tracking-widest text-sm hover:bg-white hover:text-blue-600 transition-all shadow-xl">Go to Submission Portal</button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* --- PROGRESS BAR --- */}
+      <motion.div className="fixed top-0 left-0 right-0 h-[4px] bg-[#0071e3] origin-left z-[2000]" style={{ scaleX }} />
 
       {/* --- NAVIGATION --- */}
-      <nav className={`fixed w-full z-[500] transition-all duration-500 ${scrolled ? 'bg-[#020617]/90 backdrop-blur-2xl border-b border-white/5 py-4 shadow-xl' : 'bg-transparent py-10'}`}>
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <div className="flex items-center gap-6 group">
-            <div className="bg-white p-1 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] group-hover:scale-110 transition-transform">
-              <img src={imgPath.logo} alt="IIT KGP" className="h-10 md:h-12 w-auto" />
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-[10px] font-black text-blue-500 tracking-[0.4em] uppercase mb-0.5">IIT Kharagpur</p>
-              <p className="text-white font-black text-xl tracking-tighter uppercase leading-none">ICFMS 2027</p>
+      <nav className={`fixed w-full z-[1000] transition-all duration-500 border-b ${scrolled ? 'bg-white/95 backdrop-blur-xl border-black/10 py-3 shadow-sm' : 'bg-white md:bg-transparent border-transparent py-6'}`}>
+        <div className="max-w-[1200px] mx-auto px-6 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <a href="#" className="h-10 md:h-12 block">
+              <img src={imgPath.logo} alt="IIT KGP" className="h-full w-auto object-contain" />
+            </a>
+            <div className="hidden sm:block border-l border-black/10 pl-4 h-6">
+              <p className="text-[14px] font-bold text-[#1d1d1f] tracking-tight flex items-center h-full">ICFMS 2027</p>
             </div>
           </div>
 
           <div className="hidden lg:flex items-center gap-10">
-            {['Heritage', 'About', 'Themes', 'Dates', 'Venue'].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-blue-400 transition-colors">
+            {['Heritage', 'Themes', 'Dates', 'Venue'].map((link) => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-[13px] font-semibold text-[#1d1d1f] hover:text-[#0071e3] transition-colors">
                 {link}
               </a>
             ))}
-            <button onClick={handleSubmissionRedirect} className="px-8 py-3 bg-white text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
+            <button onClick={handleSubmission} className="bg-[#0071e3] text-white text-[13px] px-6 py-2.5 rounded-full font-bold hover:bg-[#0077ed] transition-all active:scale-95 shadow-md">
               Submit Abstract
             </button>
           </div>
-          <button className="lg:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={32}/> : <Menu size={32}/>}</button>
+
+          <button className="lg:hidden text-[#1d1d1f] p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </nav>
 
+      {/* --- MOBILE NAV OVERLAY --- */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[950] bg-white pt-32 px-10 flex flex-col gap-10"
+          >
+            {['Heritage', 'Themes', 'Dates', 'Venue'].map((link) => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-4xl font-bold text-[#1d1d1f] border-b border-black/5 pb-4" onClick={() => setIsMenuOpen(false)}>
+                {link}
+              </a>
+            ))}
+            <button onClick={handleSubmission} className="bg-[#0071e3] text-white py-6 rounded-2xl font-bold text-xl shadow-lg">
+              Submit Abstract
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* --- HERO SECTION --- */}
-      <section id="home" className="relative min-h-screen flex flex-col pt-32 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={imgPath.hero} className="w-full h-full object-cover opacity-60 brightness-[0.7]" alt="IIT KGP Building" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
+      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-40 md:pt-48 pb-20">
+        <div className="max-w-[1200px] mx-auto w-full text-center space-y-12">
+          <div className="space-y-6">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[#0071e3] font-bold text-sm md:text-lg uppercase tracking-[0.3em]">
+              IIT KHARAGPUR PRESENTS
+            </motion.p>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              className="text-[#1d1d1f] text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[1.05]"
+            >
+              The International Conference on <br className="hidden md:block" /> Future Mobility Systems.
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="text-[#424245] text-xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed"
+            >
+              Innovating human movement through the intelligent convergence <br className="hidden md:block" /> of energy, data, and autonomous systems.
+            </motion.p>
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row justify-center items-center gap-10"
+          >
+            <button onClick={handleSubmission} className="bg-[#0071e3] text-white px-14 py-5 rounded-full font-bold text-xl hover:bg-[#0077ed] transition-all flex items-center gap-3 shadow-xl">
+              Submit Abstract <ArrowRight size={24} />
+            </button>
+            <div className="flex flex-col text-left border-l-4 border-[#0071e3] pl-8 py-2">
+               <span className="text-xl font-bold text-[#1d1d1f]">28—31 Jan 2027</span>
+               <span className="text-lg font-semibold text-[#86868b]">Research Park, Kolkata</span>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 1 }}
+            className="mt-20 rounded-[3.5rem] overflow-hidden shadow-2xl border border-black/5 bg-slate-100"
+          >
+            <img src={imgPath.hero} alt="IIT Kharagpur Main Building" className="w-full h-auto object-cover min-h-[300px]" />
+          </motion.div>
         </div>
+      </section>
 
-        <div className="relative z-10 max-w-[1500px] mx-auto px-6 md:px-12 w-full flex-grow flex flex-col justify-center pb-24 md:pb-40">
-          <div className="grid lg:grid-cols-12 gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="lg:col-span-8 space-y-12">
-              <div className="inline-flex items-center gap-4 py-2 px-6 bg-blue-600/10 border border-blue-500/20 rounded-full backdrop-blur-md">
-                <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em]">Official Call for Abstracts</span>
-              </div>
-
-              <div className="space-y-6">
-                <h1 className="text-5xl md:text-8xl xl:text-[110px] font-black text-white leading-[0.85] tracking-tighter uppercase">
-                  International <br /> 
-                  Conference <span className="text-blue-500 italic font-serif lowercase">on</span> <br /> 
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.35)]">
-                    Future Mobility Systems
-                  </span>
-                </h1>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-10 border-l-4 border-blue-600 pl-10">
-                <div className="space-y-1">
-                  <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest opacity-60">Conference Date</p>
-                  <p className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight italic">28 — 31 Jan 2027</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-[11px] font-black text-blue-500 uppercase tracking-widest opacity-60">Conference Venue</p>
-                  <p className="text-2xl md:text-3xl font-bold text-white uppercase tracking-tight italic leading-none">Research Park, Kolkata</p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-8 pt-4">
-                <button onClick={handleSubmissionRedirect} className="px-14 py-7 bg-white text-black font-black text-xs uppercase tracking-[0.3em] rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95">
-                  Submit Abstract
-                </button>
-                <a href="#themes" className="px-14 py-7 border-2 border-white/20 text-white font-black text-xs uppercase tracking-[0.3em] rounded-2xl hover:bg-white/10 transition-all backdrop-blur-md">
-                  View 10 Tracks
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Smart Mobility Architecture Image - Visual Focus */}
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }} className="hidden lg:flex lg:col-span-4 justify-end relative">
-               <div className="relative group w-full max-w-sm">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-[4rem] blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-                  <div className="relative border-2 border-white/20 rounded-[4rem] overflow-hidden shadow-[0_0_50px_rgba(37,99,235,0.2)] transform rotate-3 group-hover:rotate-0 transition-all duration-1000 bg-slate-900/50 backdrop-blur-sm">
-                     <img 
-                        src={imgPath.architecture} 
-                        alt="Smart Mobility Vision" 
-                        className="w-full h-auto brightness-110 contrast-125 saturate-125 object-cover" 
-                     />
-                  </div>
-                  <div className="absolute -bottom-4 -left-4 w-12 h-12 border-b-4 border-l-4 border-blue-500 rounded-bl-3xl" />
-                  <div className="absolute -top-4 -right-4 w-12 h-12 border-t-4 border-r-4 border-cyan-400 rounded-tr-3xl" />
-               </div>
-            </motion.div>
+      {/* --- STATS BENTO GRID --- */}
+      <section className="py-20 bg-[#f5f5f7]">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
+              <Award className="text-[#0071e3] mb-6" size={40} />
+              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">First Mobility Conference</p>
+              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">In the region</p>
+            </div>
+            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
+              <Workflow className="text-[#34c759] mb-6" size={40} />
+              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">10+ Conference Tracks</p>
+              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">Scientific Scope</p>
+            </div>
+            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm flex flex-col justify-between border border-black/5">
+              <Users className="text-[#5856d6] mb-6" size={40} />
+              <p className="text-3xl font-bold tracking-tight text-[#1d1d1f]">500+ Target Delegates</p>
+              <p className="text-[#86868b] text-sm mt-4 font-medium uppercase tracking-widest leading-none">Global Network</p>
+            </div>
+            <div className="bg-[#0071e3] p-10 rounded-[2.5rem] shadow-xl flex flex-col justify-between text-white">
+              <Book className="text-white mb-6" size={40} />
+              <p className="text-2xl font-bold leading-tight">Top Tier Special Issue Journals</p>
+              <p className="text-white/60 text-xs mt-4 font-bold uppercase tracking-widest leading-none">Publication Partner</p>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Stats Strip */}
-        <div className="bg-[#020617]/60 backdrop-blur-3xl border-t border-white/10 py-12">
-           <div className="max-w-[1500px] mx-auto px-6 flex flex-wrap justify-center lg:justify-between gap-12">
+      {/* --- COUNTDOWN TRACKER --- */}
+      <section className="py-24 md:py-32 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6 text-center space-y-16">
+          <div className="space-y-4">
+            <p className="text-[#0071e3] font-bold text-sm uppercase tracking-widest">Action Deadline</p>
+            <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-[#1d1d1f]">Abstract Submission Closes In</h3>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 md:gap-10">
+            {[
+              { label: 'Days', value: timeLeft.days },
+              { label: 'Hours', value: timeLeft.hours },
+              { label: 'Minutes', value: timeLeft.minutes },
+              { label: 'Seconds', value: timeLeft.seconds }
+            ].map((unit, i) => (
+              <div key={i} className="bg-[#f5f5f7] w-32 h-32 md:w-48 md:h-48 rounded-[3rem] flex flex-col items-center justify-center shadow-sm border border-black/5 group hover:bg-white hover:shadow-xl transition-all">
+                <span className="text-4xl md:text-7xl font-bold tracking-tighter text-[#1d1d1f] group-hover:text-[#0071e3] transition-colors">{String(unit.value).padStart(2, '0')}</span>
+                <span className="text-[#86868b] text-[10px] md:text-xs font-bold uppercase tracking-widest mt-2">{unit.label}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="pt-8">
+            <button onClick={handleSubmission} className="bg-[#1d1d1f] text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-black transition-all shadow-2xl">
+              Secure Your Spot Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* --- PLATINUM JUBILEE --- */}
+      <section id="heritage" className="py-24 md:py-52 bg-[#f5f5f7] relative">
+        <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+           <div className="space-y-12">
+              <div className="space-y-6">
+                <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">75 Golden Years</h2>
+                <h3 className="text-[#1d1d1f] text-6xl md:text-8xl font-bold tracking-tight leading-none">Platinum <br /> Jubilee.</h3>
+              </div>
+              <div className="bg-white p-10 md:p-14 rounded-[3rem] border border-black/5 shadow-sm">
+                 <p className="text-[#1d1d1f] text-2xl md:text-4xl font-bold leading-tight italic mb-8">
+                   "August 18, 2025 – August 18, 2027. Dedicated to the service of the nation."
+                 </p>
+                 <p className="text-[#424245] text-xl leading-relaxed font-medium">Celebrating three-quarters of a century defined by innovation, heritage, and global leadership.</p>
+              </div>
+           </div>
+           <div className="flex justify-center">
+              <motion.div 
+                whileInView={{ scale: 1 }} initial={{ scale: 0.9 }} transition={{ duration: 0.8 }}
+                className="bg-white rounded-[5rem] p-20 md:p-32 shadow-2xl border border-black/5 flex items-center justify-center max-w-lg w-full relative"
+              >
+                 <img src={imgPath.logo} alt="Anniversary Logo" className="w-full h-auto" />
+                 <div className="absolute -bottom-8 -right-8 bg-[#0071e3] text-white p-10 rounded-[3rem] shadow-2xl">
+                    <p className="text-7xl font-bold italic leading-none">75</p>
+                 </div>
+              </motion.div>
+           </div>
+        </div>
+      </section>
+
+      {/* --- ABOUT SECTION --- */}
+      <section id="about" className="py-24 md:py-48 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6 grid lg:grid-cols-2 gap-16 md:gap-24 items-center">
+           <div className="space-y-10">
+              <h2 className="text-[#1d1d1f] text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">The First IIT. <br /> <span className="text-[#86868b]">Mother of Innovation.</span></h2>
+              <p className="text-[#1d1d1f] text-xl md:text-2xl leading-relaxed font-light">
+                Established in 1951, IIT Kharagpur is the pioneer of technical education in India. Born from the site of the Hijli Detention Camp, it remains the most diversified institute in the nation.
+              </p>
+              <button onClick={() => window.open("https://www.iitkgp.ac.in/about-iitkgp")} className="bg-[#1d1d1f] text-white px-10 py-4 rounded-full font-bold hover:bg-black transition-all inline-flex items-center gap-3">
+                 Explore History <ExternalLink size={18}/>
+              </button>
+           </div>
+           <div className="rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
+              <img src={imgPath.architecture} alt="Defining Smart Mobility" className="w-full h-auto object-cover" />
+           </div>
+        </div>
+      </section>
+
+      {/* --- THEMES: VIBRANT BENTO GRID --- */}
+      <section id="themes" className="py-24 md:py-52 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="mb-24 space-y-4 text-center lg:text-left">
+            <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">Scientific Core</h2>
+            <h3 className="text-[#1d1d1f] text-5xl md:text-8xl font-bold tracking-tight">Conference Tracks.</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {themes.map((t, idx) => (
+              <motion.div 
+                whileHover={{ y: -12, scale: 1.02 }}
+                key={idx} 
+                className={`p-10 rounded-[3.5rem] bg-gradient-to-br ${t.color} flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all cursor-default min-h-[350px] relative overflow-hidden`}
+              >
+                <div className="absolute top-[-10%] right-[-10%] w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform" />
+                <div className="text-white drop-shadow-md">{t.icon}</div>
+                <div className="space-y-4">
+                  <h3 className="text-white text-2xl font-bold tracking-tight leading-tight drop-shadow-md">{t.title}</h3>
+                  <div className="h-1 w-12 bg-white/30 rounded-full" />
+                  <p className="text-white/80 text-[11px] font-bold uppercase tracking-widest">Scientific Theme {idx + 1}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- TIMELINE --- */}
+      <section id="dates" className="py-24 md:py-48 bg-[#f5f5f7]">
+        <div className="max-w-[1000px] mx-auto px-6 space-y-24">
+           <h2 className="text-[#1d1d1f] text-6xl md:text-9xl font-bold text-center tracking-tighter">Key Dates.</h2>
+           <div className="space-y-6">
               {[
-                { l: "Research Tracks", v: "10" },
-                { l: "Global Keynotes", v: "40+" },
-                { l: "Target Delegates", v: "500+" },
-                { l: "Special Journals", v: "Top Tier" }
-              ].map((s, i) => (
-                <div key={i} className="space-y-1 min-w-[160px]">
-                  <p className="text-3xl font-black text-white tracking-tighter uppercase italic">{s.v}</p>
-                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest opacity-60">{s.l}</p>
+                { l: "Abstract Submission Opens", d: "15 Feb 2026", active: true },
+                { l: "Abstract Submission Deadline", d: "15 May 2026", active: true },
+                { l: "Acceptance Notification", d: "30 Jun 2026", active: false },
+                { l: "Full Paper Submission", d: "01 Aug 2026", active: false },
+                { l: "Final Decision", d: "01 Oct 2026", active: false }
+              ].map((item, i) => (
+                <div key={i} className="bg-white p-12 md:p-16 rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center group border border-transparent hover:border-black/5 transition-all shadow-sm">
+                   <div className="text-center md:text-left mb-6 md:mb-0 text-left">
+                      <p className="text-[#86868b] text-[14px] font-bold uppercase tracking-widest mb-2">Phase 0{i+1}</p>
+                      <h4 className="text-[#1d1d1f] text-3xl font-bold tracking-tight">{item.l}</h4>
+                   </div>
+                   <p className={`text-3xl md:text-6xl font-bold tracking-tighter italic ${item.active ? 'text-[#0071e3]' : 'text-[#d2d2d7]'}`}>{item.d}</p>
                 </div>
               ))}
            </div>
         </div>
       </section>
 
-      {/* --- PLATINUM JUBILEE SECTION --- */}
-      <section id="heritage" className="py-40 bg-white text-slate-900 relative overflow-hidden">
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-24 items-center">
-           <div className="space-y-14 z-10">
-              <div className="space-y-6">
-                 <h2 className="text-[12px] font-black text-blue-600 tracking-[0.6em] uppercase">The Legacy</h2>
-                 <h3 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.8] uppercase text-slate-950">Platinum <br /> Jubilee</h3>
-              </div>
-              <div className="space-y-8">
-                 <p className="text-3xl font-bold text-slate-800 leading-tight italic border-l-8 border-blue-600 pl-10">
-                   "August 18, 2025 – August 18, 2027. Celebrating 75 Years of being dedicated to the service of the nation."
-                 </p>
-                 <p className="text-xl text-slate-500 leading-relaxed max-w-2xl">To mark this occasion, the Institute recalls the contributions of generations who have made IIT Kharagpur what it is—a time to rededicate and build for future generations.</p>
-              </div>
-           </div>
-           <div className="relative">
-              <motion.div initial={{ rotate: 10, scale: 0.9 }} whileInView={{ rotate: 0, scale: 1 }} transition={{ duration: 1.2 }} className="aspect-square bg-slate-50 rounded-[6rem] overflow-hidden shadow-2xl border-[20px] border-white flex items-center justify-center p-20">
-                 <img src={imgPath.logo} alt="Platinum Jubilee Logo" className="w-full h-auto opacity-90" />
-              </motion.div>
-              <div className="absolute -bottom-10 -right-4 bg-slate-950 text-white p-14 rounded-[3.5rem] shadow-3xl">
-                 <p className="text-7xl font-black italic tracking-tighter leading-none text-blue-500">1951</p>
-                 <p className="text-[11px] font-black uppercase tracking-[0.3em] mt-3">Birth of an Icon</p>
-              </div>
-        </div>
-        </div>
-      </section>
-
-      {/* --- ABOUT IIT KHARAGPUR --- */}
-      <section id="about" className="py-40 bg-slate-50 border-y border-slate-200 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-100/50 skew-x-[-15deg] translate-x-1/2" />
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 relative z-10">
-          <div className="max-w-5xl space-y-12">
-            <h2 className="text-[12px] font-black text-blue-600 tracking-[0.6em] uppercase">About The Mother Institute</h2>
-            <h3 className="text-6xl md:text-[110px] font-black text-slate-950 tracking-tighter uppercase leading-[0.85]">The Foundation <br /> of Innovation</h3>
-            <p className="text-2xl text-slate-600 leading-relaxed">
-              IIT Kharagpur, the first and the oldest of the IITs, was born in May 1950 in the Hijli Detention Camp. Since its formal inauguration by Maulana Abul Kalam Azad on August 18, 1951, it has remained the cradle of Indian technical education—diversifying from traditional engineering into law, management, and medical sciences.
-            </p>
-            <div className="flex flex-wrap gap-12 pt-6">
-               <a href="https://www.iitkgp.ac.in/about-iitkgp" target="_blank" rel="noreferrer" className="inline-flex items-center gap-6 px-10 py-5 bg-slate-950 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-blue-600 transition-all group">
-                  Institutional History <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
-               </a>
-               <div className="flex items-center gap-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">
-                  <Globe size={18} className="text-blue-500" /> 2100 Acre Research Ecosystem
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- THEMES: CYBER-GLASS ESTHETIC --- */}
-      <section id="themes" className="py-40 bg-[#020617] relative">
-        <div className="max-w-[1500px] mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-32">
-            <div className="space-y-6">
-               <h2 className="text-[12px] font-black text-blue-500 tracking-[0.6em] uppercase">Scientific Matrix</h2>
-               <h3 className="text-7xl md:text-[120px] font-black text-white tracking-tighter uppercase leading-none">The 10 <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 italic">Themes</span></h3>
-            </div>
-            <p className="max-w-md text-slate-500 font-medium text-lg leading-relaxed italic border-l-4 border-blue-500 pl-8">Charting the technical convergence of future mobility architectures, AI, and sustainable ecosystems.</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            {themes.map((t, idx) => (
-              <motion.div 
-                whileHover={{ y: -15 }}
-                key={idx} className={`p-10 rounded-[3.5rem] bg-gradient-to-br ${t.color} border ${t.border} backdrop-blur-xl group cursor-pointer shadow-xl relative overflow-hidden min-h-[380px] flex flex-col justify-between transition-all duration-500`}
-              >
-                <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full blur-[60px] group-hover:scale-150 transition-transform duration-1000" />
-                <div>
-                   <div className={`w-16 h-16 rounded-2xl bg-slate-900 border ${t.border} flex items-center justify-center mb-10 transition-all shadow-[0_0_20px_rgba(37,99,235,0.1)] group-hover:bg-white group-hover:text-slate-950 ${t.text}`}>
-                     {React.cloneElement(t.icon, { size: 30 })}
-                   </div>
-                   <h4 className="text-2xl font-black leading-tight tracking-tighter uppercase text-white group-hover:text-blue-200 transition-colors">{t.title}</h4>
-                </div>
-                <div className="mt-8 pt-8 border-t border-white/5">
-                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity">Track {String(idx + 1).padStart(2, '0')}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- DATES --- */}
-      <section id="dates" className="py-40 bg-white text-slate-900">
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12">
-          <div className="text-center mb-32 space-y-4">
-            <h2 className="text-[12px] font-black text-blue-600 tracking-[0.5em] uppercase">Roadmap 2026/27</h2>
-            <h3 className="text-7xl md:text-[110px] font-black tracking-tighter uppercase text-slate-950 leading-none">Key Dates</h3>
-          </div>
-
-          <div className="grid gap-4 max-w-6xl mx-auto">
-             {[
-               { l: "Abstract Submission Opens", d: "15 Feb 2026", active: true },
-               { l: "Abstract Submission Deadline", d: "15 May 2026", active: true },
-               { l: "Acceptance Notification", d: "30 Jun 2026", active: false },
-               { l: "Full Paper Submission", d: "01 Aug 2026", active: false },
-               { l: "Decision Notification", d: "01 Oct 2026", active: false },
-               { l: "Final Paper Submission", d: "10 Nov 2026", active: false }
-             ].map((date, i) => (
-               <motion.div whileHover={{ x: 15 }} key={i} className={`flex flex-col md:flex-row md:items-center justify-between p-10 md:p-12 rounded-[3.5rem] border-2 transition-all ${date.active ? 'bg-slate-950 border-blue-500 shadow-2xl text-white' : 'bg-slate-50 border-slate-200'}`}>
-                  <div className="space-y-1">
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${date.active ? 'text-blue-400' : 'text-slate-400'}`}>Phase 0{i+1}</p>
-                    <h4 className="text-3xl font-black uppercase tracking-tighter">{date.l}</h4>
-                  </div>
-                  <div className="flex items-center gap-10 mt-6 md:mt-0">
-                    <span className={`text-4xl md:text-6xl font-black italic tracking-tighter ${date.active ? 'text-white' : 'text-blue-600'}`}>{date.d}</span>
-                    {date.active && <div className="w-4 h-4 rounded-full bg-blue-500 animate-pulse" />}
-                  </div>
-               </motion.div>
-             ))}
-          </div>
-        </div>
-      </section>
-
       {/* --- VENUE --- */}
-      <section id="venue" className="py-40 bg-[#020617] overflow-hidden">
-        <div className="max-w-[1500px] mx-auto px-6">
-           <div className="bg-slate-900 rounded-[5rem] overflow-hidden flex flex-col lg:flex-row border border-white/5 shadow-2xl relative">
-              <div className="lg:w-1/2 p-12 md:p-24 flex flex-col justify-center space-y-16 bg-slate-900 z-10 relative">
-                 <div className="space-y-8">
-                    <div className="inline-flex items-center gap-3 bg-blue-600/20 text-blue-400 px-6 py-2 rounded-full font-black uppercase text-[11px] tracking-widest">
-                       <MapPin size={18} /> Rajarhat, Kolkata
-                    </div>
-                    <h2 className="text-7xl md:text-[110px] font-black text-white leading-none tracking-tighter uppercase italic">Research <br /> <span className="text-blue-500 font-serif lowercase">Park</span></h2>
+      <section id="venue" className="py-24 md:py-48 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6">
+           <div className="bg-[#1d1d1f] rounded-[4rem] overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[650px] shadow-3xl">
+              <div className="lg:w-3/5 p-16 md:p-28 flex flex-col justify-center space-y-12">
+                 <div className="space-y-6">
+                    <span className="bg-[#0071e3] text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest inline-block shadow-lg">The Research Park</span>
+                    <h2 className="text-7xl md:text-[130px] font-bold text-white tracking-tighter italic leading-none">Kolkata.</h2>
                  </div>
-                 <div className="border-l-8 border-blue-600 pl-12 space-y-4">
-                    <p className="text-white text-4xl font-black uppercase tracking-tighter">IIT Kharagpur Center</p>
-                    <p className="text-slate-400 text-xl font-medium">Newtown, Kolkata 700135. <br /> A premier technical hub for industry-academia collaboration.</p>
-                 </div>
-                 <a href="https://maps.app.goo.gl/JmFBsApsZ6si41WSA" target="_blank" rel="noreferrer" className="inline-flex items-center gap-8 bg-white text-slate-950 px-16 py-8 rounded-[2.5rem] font-black uppercase text-sm tracking-widest hover:bg-blue-600 hover:text-white transition-all group">
-                    View Directions <MapNavigation size={28} className="group-hover:translate-x-2 transition-transform" />
-                 </a>
-              </div>
-              <div className="lg:w-1/2 h-[500px] lg:h-auto overflow-hidden relative">
-                 <img src={imgPath.venue} alt="Kolkata Venue" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
-                 <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-transparent to-transparent hidden lg:block" />
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* --- FOOTER & CORRESPONDENCE --- */}
-      <footer className="bg-[#01030d] pt-40 pb-16 border-t border-white/5 relative z-10">
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 grid lg:grid-cols-4 gap-24">
-           
-           <div className="lg:col-span-1 space-y-12 text-center sm:text-left">
-              <div className="flex items-center justify-center sm:justify-start gap-6">
-                 <div className="bg-white p-3 rounded-2xl h-16 w-16 shadow-xl"><img src={imgPath.logo} alt="ICFMS" className="h-full w-auto" /></div>
-                 <h4 className="text-3xl font-black text-white tracking-tighter uppercase leading-none">ICFMS 2027</h4>
-              </div>
-              <p className="text-xl text-slate-500 leading-relaxed font-medium italic">Architecting the future of human mobility through technical excellence.</p>
-              <div className="flex justify-center sm:justify-start gap-8">
-                 {[Linkedin, Twitter, Facebook, Instagram].map((Icon, i) => (
-                   <button key={i} className="text-slate-500 hover:text-blue-500 transition-colors"><Icon size={26} /></button>
-                 ))}
-              </div>
-           </div>
-
-           <div className="lg:col-span-2 space-y-12">
-              <h5 className="text-[11px] font-black text-blue-500 uppercase tracking-widest border-b border-white/10 pb-4 inline-block">Correspondence</h5>
-              <div className="flex flex-col sm:flex-row gap-10 items-start">
-                 <div className="p-8 bg-blue-600/10 rounded-[2.5rem] border border-blue-600/20 text-blue-500 shrink-0 shadow-2xl transition-transform hover:scale-110"><Mail size={44} /></div>
-                 <div className="space-y-8">
-                    <div className="space-y-2">
-                       <p className="text-white font-black uppercase text-3xl md:text-5xl tracking-tighter leading-none italic underline decoration-blue-600 decoration-4 underline-offset-8 mb-6">Prof Arkopal K. Goswami, PhD</p>
-                       <p className="text-blue-400 font-bold uppercase tracking-widest text-[11px]">Associate Professor, RCGSIDM</p>
-                       <p className="text-slate-300 font-medium uppercase tracking-[0.2em] text-[11px]">Associate Dean, International Relations</p>
-                       <p className="text-slate-500 font-black uppercase tracking-widest text-[10px]">IIT Kharagpur</p>
-                    </div>
-                    <div className="flex flex-wrap gap-8">
-                       <a href="mailto:icfms.iitkgp@gmail.com" className="flex items-center gap-4 text-white font-black uppercase tracking-widest text-[12px] bg-white/5 px-8 py-5 rounded-2xl hover:bg-blue-600 transition-all border border-white/5">
-                          <Mail size={18} className="text-blue-400" /> icfms.iitkgp@gmail.com
-                       </a>
-                       <a href="https://www.mustlab.in/" target="_blank" rel="noreferrer" className="flex items-center gap-4 text-white font-black uppercase tracking-widest text-[12px] bg-white/5 px-8 py-5 rounded-2xl hover:bg-blue-600 transition-all border border-white/5">
-                          <Globe size={18} className="text-blue-400" /> Visit Lab Site
-                       </a>
-                    </div>
-                 </div>
-              </div>
-           </div>
-
-           <div className="lg:col-span-1 space-y-12 text-center sm:text-left">
-              <h5 className="text-[11px] font-black text-blue-500 uppercase tracking-widest border-b border-white/10 pb-4 inline-block">Resources</h5>
-              <ul className="space-y-6 text-slate-500 font-black uppercase tracking-widest text-[11px]">
-                 <li><a href="https://www.iitkgp.ac.in" target="_blank" className="hover:text-white transition-colors">Main Institute Portal</a></li>
-                 <li><a href="https://www.mustlab.in" target="_blank" className="hover:text-white transition-colors">MUST Laboratory Hub</a></li>
-                 <li><a href="#" className="hover:text-white transition-colors">75 Years Gallery</a></li>
-              </ul>
-           </div>
-        </div>
-
-        {/* --- CREDITS & MOTTO --- */}
-        <div className="max-w-[1500px] mx-auto px-6 md:px-12 mt-40 pt-20 border-t border-white/10">
-           <div className="grid md:grid-cols-2 gap-16 items-center text-center md:text-left">
-              <div className="space-y-6">
-                 <p className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase leading-none">
-                    योगः कर्मसु कौशलम् 
-                 </p>
-                 <p className="text-[12px] font-black text-blue-500 uppercase tracking-[0.5em] leading-relaxed">
-                    Excellence in Action is Yoga
-                 </p>
-                 <div className="h-px w-20 bg-slate-800 mx-auto md:mx-0" />
-                 <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.3em] leading-loose">
-                    Dedicated to the Service of the Nation <br />
-                    Since 1951
-                 </p>
-              </div>
-
-              <div className="flex flex-col md:items-end justify-center">
-                 <div className="p-8 rounded-[3rem] text-center md:text-right">
-                    <div className="flex items-center gap-4 justify-center md:justify-end mb-2">
-                       <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.4em]">Made with love</span>
-                       <Heart size={14} className="text-red-500 fill-current animate-pulse" />
-                    </div>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
-                       by <a 
-                          href="https://kapil2020.github.io/website" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-white transition-colors underline decoration-blue-600 decoration-2 underline-offset-4"
-                       >Kapil</a>
+                 <div className="space-y-8 border-l-8 border-[#0071e3] pl-12 text-left">
+                    <p className="text-white text-5xl font-bold uppercase tracking-tight italic">Innovation Hub</p>
+                    <p className="text-[#86868b] text-2xl leading-relaxed max-w-lg font-medium">
+                      Newtown, West Bengal. <br /> 
+                      A world-class technical cluster hosting the global nexus of Future Mobility.
                     </p>
                  </div>
+                 <button onClick={() => window.open("https://maps.app.goo.gl/JmFBsApsZ6si41WSA", "_blank")} className="bg-white text-black w-fit px-16 py-6 rounded-full font-bold text-xl hover:bg-[#0071e3] hover:text-white transition-all shadow-2xl active:scale-95">
+                    View Directions
+                 </button>
+              </div>
+              <div className="lg:w-2/5 overflow-hidden">
+                 <img src={imgPath.venue} alt="Kolkata Venue" className="w-full h-full object-cover grayscale transition-all duration-1000 hover:grayscale-0" />
               </div>
            </div>
+        </div>
+      </section>
 
-           <div className="mt-20 pt-10 border-t border-white/5 opacity-40 text-[9px] font-black uppercase tracking-[0.6em] flex flex-col md:flex-row justify-between items-center gap-6">
-              <p>&copy; 2027 ICFMS | Indian Institute of Technology Kharagpur</p>
-              <p>International Research Convention</p>
-           </div>
+      {/* --- FOOTER --- */}
+      <footer className="bg-white pt-40 pb-16 border-t border-black/5 relative z-10">
+        <div className="max-w-[1200px] mx-auto px-6 text-[#1d1d1f]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40">
+             <div className="space-y-10 text-left">
+                <img src={imgPath.logo} alt="ICFMS Logo" className="h-20 w-auto" />
+                <div className="space-y-4">
+                  <p className="text-[#1d1d1f] text-4xl font-bold tracking-tighter uppercase leading-none">योगः कर्मसु कौशलम्</p>
+                  <p className="text-[#0071e3] text-sm font-bold uppercase tracking-widest">Excellence in Action is Yoga.</p>
+                </div>
+                <p className="text-[#424245] text-xl font-medium italic leading-relaxed">"Dedicated to the service of the nation since 1951."</p>
+             </div>
+             
+             <div className="lg:col-span-2 space-y-12 text-left">
+                <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Official Correspondence</h5>
+                <div className="space-y-6">
+                   <p className="text-[#1d1d1f] text-5xl font-bold tracking-tighter leading-none">Prof Arkopal K. Goswami, PhD</p>
+                   <div className="space-y-2 pt-2">
+                      <p className="text-[#1d1d1f] font-bold text-xl">Associate Professor, RCGSIDM</p>
+                      <p className="text-[#86868b] text-lg font-medium uppercase tracking-widest leading-relaxed">Associate Dean, International Relations <br /> IIT Kharagpur</p>
+                   </div>
+                </div>
+                <div className="flex flex-wrap gap-10">
+                   <a href="mailto:icfms.iitkgp@gmail.com" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8 flex items-center gap-4">icfms.iitkgp@gmail.com <Mail size={22}/></a>
+                   <a href="https://www.mustlab.in/" target="_blank" className="text-[#0071e3] text-xl font-bold hover:underline underline-offset-8 flex items-center gap-4">mustlab.in <Globe size={22}/></a>
+                </div>
+             </div>
+
+             <div className="space-y-12 text-left">
+                <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Resources</h5>
+                <ul className="space-y-6 text-[#1d1d1f] text-lg font-semibold">
+                   <li><a href="https://www.iitkgp.ac.in" className="hover:text-[#0071e3] transition-colors">Institute Portal</a></li>
+                   <li><a href="#" className="hover:text-[#0071e3] transition-colors">Anniversary Hub</a></li>
+                </ul>
+             </div>
+          </div>
+
+          <div className="pt-24 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-12">
+             <div className="text-[#86868b] text-[13px] font-bold text-center md:text-left uppercase tracking-widest leading-loose max-w-md">
+                &copy; 2027 ICFMS | Indian Institute of Technology Kharagpur <br /> 
+                A Global Forum on the Future of Human Mobility.
+             </div>
+             <div className="text-[18px] text-[#1d1d1f] font-bold flex items-center gap-4">
+                Made with love <Heart size={24} className="text-red-500 fill-current animate-pulse" /> by <a href="https://kapil2020.github.io/website" target="_blank" className="text-[#0071e3] hover:underline underline-offset-8">Kapil</a>
+             </div>
+          </div>
         </div>
       </footer>
 
       <style dangerouslySetInnerHTML={{ __html: `
         html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; border: 3px solid #020617; }
-        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 10px; border: 3px solid #ffffff; }
+        ::-webkit-scrollbar-thumb:hover { background: #86868b; }
+        img { max-width: 100%; height: auto; }
       `}} />
     </div>
   );
