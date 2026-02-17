@@ -5,16 +5,16 @@ import {
   Calendar, MapPin, Mail, Globe, Zap, Cpu, Truck, ShieldCheck, 
   Leaf, Settings, ArrowRight, Navigation as MapNavigation, 
   Heart, Building2, BookOpen, Bell, Scale, BrainCircuit, Workflow, X, Menu, ExternalLink,
-  Facebook, Twitter, Linkedin, Timer, Award, Users, Book, ChevronUp, Plus
+  Facebook, Twitter, Linkedin, Timer, Award, Users, Book, ChevronUp, Plus, Play
 } from 'lucide-react';
 
 /**
  * ICFMS 2027 - THE OFFICIAL INTERFACE
- * Version 13.0: Detailed Professional Content + Apple Pro Responsiveness
- * Design: High-contrast, Minimalist, Global Academic Excellence
+ * Version 13.4: Final Production Build (Launch Ready)
+ * Design: Apple Pro Aesthetic, Mobile-Optimized Bento, YouTube Integration
  */
 
-// --- SUBTLE AMBIENT BACKGROUND ---
+// --- PERFORMANCE-OPTIMIZED TECH BACKGROUND ---
 const TechCanvas = () => {
   const mountRef = useRef(null);
   useEffect(() => {
@@ -28,7 +28,7 @@ const TechCanvas = () => {
       mountRef.current.appendChild(renderer.domElement);
 
       const particlesGeometry = new THREE.BufferGeometry();
-      const count = window.innerWidth < 768 ? 150 : 400; 
+      const count = window.innerWidth < 768 ? 120 : 400; 
       const posArray = new Float32Array(count * 3);
       for (let i = 0; i < count * 3; i++) posArray[i] = (Math.random() - 0.5) * 80;
       particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -46,7 +46,7 @@ const TechCanvas = () => {
 
       const animate = () => {
         requestAnimationFrame(animate);
-        particlesMesh.rotation.y += 0.0001;
+        particlesMesh.rotation.y += 0.00015;
         renderer.render(scene, camera);
       };
       animate();
@@ -63,7 +63,7 @@ const TechCanvas = () => {
         renderer.dispose();
       };
     } catch (e) {
-      console.error(e);
+      console.warn("WebGL suppressed for performance.");
     }
   }, []);
   
@@ -92,8 +92,7 @@ const App = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       const targetDate = new Date("2026-05-15T23:59:59").getTime();
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+      const diff = targetDate - new Date().getTime();
       if (diff > 0) {
         setTimeLeft({
           days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -127,7 +126,7 @@ const App = () => {
   const faqs = [
     { q: "What is the core focus of ICFMS 2027?", a: "The conference focuses on architecting future mobility through clean energy, autonomous intelligence, and sustainable urban transit systems." },
     { q: "How can I participate as a delegate?", a: "Registration will open following the abstract acceptance phase. Please stay tuned to our official portal for the live link." },
-    { q: "Are there publication opportunities?", a: "Yes, selected high-quality papers will be fast-tracked for publication in Top Tier Special Issue Journals." }
+    { q: "Are there publication opportunities?", a: "Yes, selected full paper will publish in indexed conference proceedings and special issue journal's." }
   ];
 
   return (
@@ -187,7 +186,7 @@ const App = () => {
               IIT KHARAGPUR PRESENTS
             </motion.p>
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-[#1d1d1f] text-4xl sm:text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[1.05]">
-              The International Conference on <br className="hidden md:block" /> Future Mobility Systems.
+              The International Conference on <br className="hidden md:block" /> Future Mobility Systems
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8 }} className="text-[#424245] text-xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed">
               Innovating human movement through the intelligent convergence <br className="hidden md:block" /> of energy, data, and autonomous systems.
@@ -213,14 +212,14 @@ const App = () => {
       {/* --- STATS BENTO GRID --- */}
       <section className="py-20 bg-[#f5f5f7]">
         <div className="max-w-[1200px] mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {[
-              { icon: <Award className="text-[#0071e3]" size={32}/>, title: "First Mobility Conference", sub: "Regional Premiere" },
+              { icon: <Award className="text-[#0071e3]" size={32}/>, title: "First Mobility Conference", sub: "Regional Area" },
               { icon: <Workflow className="text-[#34c759]" size={32}/>, title: "10+ Tracks", sub: "Scientific Matrix" },
               { icon: <Users className="text-[#5856d6]" size={32}/>, title: "500+ Delegates", sub: "Global Network" },
-              { icon: <Book className="text-white" size={32}/>, title: "Top Tier Journals", sub: "Publication Hub", dark: true }
+              { icon: <Book className="text-white" size={32}/>, title: "Publication Opportunity", sub: "Selected full paper in indexed conference proceedings and special issue journal's", dark: true }
             ].map((stat, i) => (
-              <div key={i} className={`${stat.dark ? 'bg-[#0071e3] text-white shadow-xl' : 'bg-white text-[#1d1d1f] shadow-sm'} p-6 md:p-10 rounded-[2.5rem] flex flex-col justify-between border border-black/5 transition-transform hover:scale-[1.02]`}>
+              <div key={i} className={`${stat.dark ? 'bg-[#0071e3] text-white shadow-xl' : 'bg-white text-[#1d1d1f] shadow-sm'} p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] flex flex-col justify-between border border-black/5 transition-transform hover:scale-[1.02]`}>
                 <div className="mb-6">{stat.icon}</div>
                 <div>
                   <p className="text-xl md:text-2xl font-bold tracking-tight leading-none">{stat.title}</p>
@@ -263,17 +262,17 @@ const App = () => {
                 <h2 className="text-[#0071e3] font-bold text-lg uppercase tracking-widest">Historic 75 Years</h2>
                 <h3 className="text-[#1d1d1f] text-6xl md:text-9xl font-bold tracking-tight leading-none text-[#1d1d1f]">Platinum <br /> Jubilee.</h3>
               </div>
-              <div className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-black/5 shadow-sm">
-                 <p className="text-[#1d1d1f] text-2xl md:text-5xl font-bold leading-tight italic mb-10">
+              <div className="bg-white p-10 md:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-black/5 shadow-sm">
+                 <p className="text-[#1d1d1f] text-2xl md:text-4xl font-bold leading-tight italic mb-10">
                    "August 18, 2025 – August 18, 2027. Dedicated to the service of the nation."
                  </p>
                  <p className="text-[#424245] text-xl leading-relaxed font-medium">Marking three-quarters of a century defined by innovation, excellence, and global academic leadership.</p>
               </div>
            </div>
            <div className="flex justify-center relative">
-              <motion.div whileInView={{ scale: 1 }} initial={{ scale: 0.9 }} transition={{ duration: 0.8 }} className="bg-white rounded-[6rem] p-16 md:p-28 shadow-2xl border border-black/5 flex items-center justify-center max-w-lg w-full relative">
+              <motion.div whileInView={{ scale: 1 }} initial={{ scale: 0.9 }} transition={{ duration: 0.8 }} className="bg-white rounded-[4rem] md:rounded-[6rem] p-12 md:p-28 shadow-2xl border border-black/5 flex items-center justify-center max-w-lg w-full relative">
                  <img src={imgPath.logo} alt="PJ Logo" className="w-full h-auto" />
-                 <div className="absolute -bottom-8 -right-8 bg-[#0071e3] text-white p-10 rounded-[3rem] shadow-2xl"><p className="text-6xl font-bold italic leading-none">75</p></div>
+                 <div className="absolute -bottom-8 -right-8 bg-[#0071e3] text-white p-10 rounded-[2rem] md:rounded-[3rem] shadow-2xl"><p className="text-5xl md:text-6xl font-bold italic leading-none">75</p></div>
               </motion.div>
            </div>
         </div>
@@ -291,9 +290,33 @@ const App = () => {
                  Explore Institutional History <ExternalLink size={18}/>
               </button>
            </div>
-           <div className="rounded-[3.5rem] overflow-hidden shadow-2xl border-8 border-[#f5f5f7]">
+           <div className="rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl border-8 border-[#f5f5f7]">
               <img src={imgPath.architecture} alt="Defining Smart Mobility" className="w-full h-auto object-cover" />
            </div>
+        </div>
+      </section>
+
+      {/* --- VISION VIDEO SECTION --- */}
+      <section className="py-24 bg-[#f5f5f7]">
+        <div className="max-w-[1200px] mx-auto px-6 text-center space-y-16">
+          <div className="space-y-4">
+            <h2 className="text-[#0071e3] font-bold text-sm uppercase tracking-widest">Conference Vision</h2>
+            <h3 className="text-4xl md:text-7xl font-bold tracking-tight text-[#1d1d1f]">Insights into Future Mobility.</h3>
+          </div>
+          
+          <motion.div 
+            whileInView={{ opacity: 1, scale: 1 }} initial={{ opacity: 0, scale: 0.95 }} transition={{ duration: 1 }}
+            className="w-full max-w-5xl mx-auto rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-[0_60px_100px_-20px_rgba(0,0,0,0.2)] bg-black aspect-video relative group"
+          >
+            <iframe 
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/dDdnP4PaXV4?autoplay=0&rel=0&modestbranding=1" 
+              title="ICFMS 2027 Vision Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+            ></iframe>
+          </motion.div>
         </div>
       </section>
 
@@ -308,7 +331,7 @@ const App = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {themes.map((t, idx) => (
-              <motion.div key={idx} whileHover={{ y: -10 }} className={`p-8 rounded-[3rem] bg-gradient-to-br ${t.color} flex flex-col justify-between min-h-[350px] shadow-lg group relative overflow-hidden`}>
+              <motion.div key={idx} whileHover={{ y: -10 }} className={`p-8 rounded-[2.5rem] md:rounded-[3rem] bg-gradient-to-br ${t.color} flex flex-col justify-between min-h-[320px] md:min-h-[350px] shadow-lg group relative overflow-hidden`}>
                 <div className="absolute top-[-5%] right-[-5%] w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform" />
                 <div className="text-white">{t.icon}</div>
                 <div className="space-y-4">
@@ -335,9 +358,9 @@ const App = () => {
                 { l: "Full Paper Submission", d: "01 Aug 2026", active: false },
                 { l: "Final Decision Notification", d: "01 Oct 2026", active: false }
               ].map((item, i) => (
-                <div key={i} className="bg-white p-12 md:p-16 rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center group border border-transparent hover:border-black/5 transition-all shadow-sm">
+                <div key={i} className="bg-white p-10 md:p-14 rounded-[2rem] md:rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center group border border-transparent hover:border-black/5 transition-all shadow-sm">
                    <div className="text-center md:text-left mb-6 md:mb-0 text-left">
-                      <p className="text-[#86868b] text-[14px] font-bold uppercase tracking-widest mb-2">Phase 0{i+1}</p>
+                      <p className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest mb-2">Phase 0{i+1}</p>
                       <h4 className="text-[#1d1d1f] text-3xl font-bold tracking-tight">{item.l}</h4>
                    </div>
                    <p className={`text-3xl md:text-6xl font-bold tracking-tighter italic ${item.active ? 'text-[#0071e3]' : 'text-[#d2d2d7]'}`}>{item.d}</p>
@@ -353,7 +376,7 @@ const App = () => {
            <h3 className="text-5xl md:text-8xl font-bold tracking-tighter text-center mb-24 text-[#1d1d1f]">Common Questions.</h3>
            <div className="space-y-4">
               {faqs.map((faq, i) => (
-                <div key={i} className="bg-[#f5f5f7] rounded-3xl overflow-hidden border border-black/5">
+                <div key={i} className="bg-[#f5f5f7] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border border-black/5">
                    <button onClick={() => setActiveFaq(activeFaq === i ? null : i)} className="w-full p-8 md:p-10 flex justify-between items-center text-left hover:bg-[#e8e8ed] transition-colors">
                       <span className="text-xl md:text-2xl font-bold text-[#1d1d1f]">{faq.q}</span>
                       {activeFaq === i ? <ChevronUp size={24} color="#0071e3"/> : <Plus size={24} color="#86868b"/>}
@@ -374,7 +397,7 @@ const App = () => {
       {/* --- VENUE --- */}
       <section id="venue" className="py-24 md:py-48 bg-[#f5f5f7] scroll-mt-20">
         <div className="max-w-[1200px] mx-auto px-6">
-           <div className="bg-[#1d1d1f] rounded-[4rem] overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[650px] shadow-3xl">
+           <div className="bg-[#1d1d1f] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[650px] shadow-3xl">
               <div className="lg:w-3/5 p-12 md:p-28 flex flex-col justify-center space-y-12">
                  <div className="space-y-8">
                     <span className="bg-[#0071e3] text-white px-8 py-3 rounded-full font-bold text-sm uppercase tracking-widest inline-block shadow-lg">The Research Park</span>
@@ -413,7 +436,7 @@ const App = () => {
              <div className="lg:col-span-2 space-y-12 text-left">
                 <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Official Correspondence</h5>
                 <div className="space-y-6">
-                   <p className="text-[#1d1d1f] text-5xl font-bold tracking-tighter leading-none">Prof Arkopal K. Goswami, PhD</p>
+                   <p className="text-[#1d1d1f] text-5xl font-bold tracking-tighter">Prof Arkopal K. Goswami, PhD</p>
                    <div className="space-y-2 pt-2 text-xl font-semibold">
                       <p className="text-[#1d1d1f]">Associate Professor, RCGSIDM</p>
                       <p className="text-[#86868b] leading-relaxed uppercase text-[15px] tracking-widest">Associate Dean, International Relations <br /> IIT Kharagpur</p>
@@ -429,7 +452,7 @@ const App = () => {
                 <h5 className="text-[#86868b] text-[13px] font-bold uppercase tracking-widest border-b border-black/10 pb-5 inline-block">Resources</h5>
                 <ul className="space-y-6 text-[#1d1d1f] text-xl font-bold">
                    <li><a href="https://www.iitkgp.ac.in" className="hover:text-[#0071e3] transition-colors decoration-2 underline-offset-4">Institute Portal</a></li>
-                   <li><a href="#" className="hover:text-[#0071e3] transition-colors decoration-2 underline-offset-4">Anniversary Gallery</a></li>
+                   <li><a href="https://www.iitkgp.ac.in/pj" target="_blank" rel="noopener noreferrer" className="hover:text-[#0071e3] transition-colors decoration-2 underline-offset-4">Platinum Jubilee Website</a></li>
                 </ul>
              </div>
           </div>
