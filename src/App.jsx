@@ -92,7 +92,7 @@ const App = () => {
     logo: "https://raw.githubusercontent.com/kapil2020/web/main/logo%20pj.png",
     hero: "https://raw.githubusercontent.com/kapil2020/web/main/carousel-2.jpg.png",
     venue: "https://raw.githubusercontent.com/kapil2020/web/main/venue1.jpg",
-    architecture: "https://raw.githubusercontent.com/kapil2020/web/main/architechture.png",
+    architecture: "https://raw.githubusercontent.com/kapil2020/web/blob/main/Gallery/MobilityAI1_Cover.png",
     flyer: "https://raw.githubusercontent.com/kapil2020/web/main/linkedln.png"
   };
 
