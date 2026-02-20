@@ -10,8 +10,61 @@ import {
 
 /**
  * ICFMS 2027 - ULTIMATE PRO EDITION
- * Design: Ultra-Premium Apple Pro Aesthetic, Fluid Bento, WebGL Kinetics, 3D Interactions
+ * Design: Ultra-Premium Apple Pro Aesthetic, Fluid Bento, WebGL Kinetics, 3D Interactions, SEO Optimized
  */
+
+// --- DYNAMIC SEO & FAVICON MANAGER ---
+const useSEO = (imgPath) => {
+  useEffect(() => {
+    // Set Document Title
+    document.title = "ICFMS 2027 | Future Mobility Systems";
+
+    const setMetaTag = (attrName, attrValue, content) => {
+      let element = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+      if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attrName, attrValue);
+        document.head.appendChild(element);
+      }
+      element.setAttribute('content', content);
+    };
+
+    const setLinkTag = (rel, href) => {
+      let element = document.querySelector(`link[rel="${rel}"]`);
+      if (!element) {
+        element = document.createElement('link');
+        element.setAttribute('rel', rel);
+        document.head.appendChild(element);
+      }
+      element.setAttribute('href', href);
+    };
+
+    // Favicon & Touch Icons
+    setLinkTag('icon', imgPath.logo);
+    setLinkTag('apple-touch-icon', imgPath.logo);
+
+    const description = "Innovating human movement through the intelligent convergence of energy, data, and autonomous systems. Hosted by IIT Kharagpur.";
+    const title = "ICFMS 2027 | Future Mobility Systems";
+
+    // Standard SEO
+    setMetaTag('name', 'description', description);
+    setMetaTag('name', 'keywords', 'ICFMS, Future Mobility Systems, IIT Kharagpur, Smart Infrastructure, EV, Autonomous Vehicles, Conference 2027');
+
+    // Open Graph / WhatsApp / Facebook / LinkedIn
+    setMetaTag('property', 'og:type', 'website');
+    setMetaTag('property', 'og:url', window.location.href);
+    setMetaTag('property', 'og:title', title);
+    setMetaTag('property', 'og:description', description);
+    setMetaTag('property', 'og:image', imgPath.hero);
+
+    // Twitter
+    setMetaTag('name', 'twitter:card', 'summary_large_image');
+    setMetaTag('name', 'twitter:title', title);
+    setMetaTag('name', 'twitter:description', description);
+    setMetaTag('name', 'twitter:image', imgPath.hero);
+
+  }, [imgPath]);
+};
 
 // --- PERFORMANCE-OPTIMIZED FLUID TECH BACKGROUND ---
 const TechCanvas = () => {
@@ -321,6 +374,9 @@ const App = () => {
     venue: "https://raw.githubusercontent.com/kapil2020/web/main/venue1.jpg",
     architecture: "https://raw.githubusercontent.com/kapil2020/web/main/Gallery/MobilityAI1_Cover.png?raw=true",
   };
+
+  // Initialize SEO
+  useSEO(imgPath);
 
   const handleSubmission = () => window.open(FORM_URL, '_blank', 'noopener,noreferrer');
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -948,7 +1004,7 @@ const App = () => {
                 A Global Forum on the Future of Human Mobility.
              </div>
              <div className="text-xs md:text-sm text-[#424245] font-semibold flex items-center gap-2 md:gap-3 bg-[#f5f5f7] px-4 md:px-6 py-2.5 md:py-3 rounded-full">
-                Engineered with <Heart size={14} className="md:w-4 md:h-4 text-red-500 fill-current animate-pulse" /> by <a href="https://kapil2020.github.io/website" target="_blank" rel="noreferrer" className="text-[#1d1d1f] font-bold hover:text-[#0071e3] transition-colors interactive-element">Kapil</a>
+                Made with <Heart size={14} className="md:w-4 md:h-4 text-red-500 fill-current animate-pulse" /> by <a href="https://kapil2020.github.io/website" target="_blank" rel="noreferrer" className="text-[#1d1d1f] font-bold hover:text-[#0071e3] transition-colors interactive-element">Kapil</a>
              </div>
           </div>
         </div>
