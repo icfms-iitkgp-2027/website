@@ -283,9 +283,9 @@ const TiltCard = ({ children, className }) => {
 // --- HAND DRAWN APPLE PENCIL EFFECT ---
 const HandDrawnHighlight = ({ children, color = "#0071e3", delay = 1 }) => {
   return (
-    <span className="relative inline-block whitespace-nowrap">
+    <span className="relative inline-block">
       <span className="relative z-10">{children}</span>
-      <svg className="absolute -inset-x-4 md:-inset-x-6 -inset-y-2 md:-inset-y-4 w-[calc(100%+32px)] md:w-[calc(100%+48px)] h-[calc(100%+16px)] md:h-[calc(100%+32px)] pointer-events-none z-0 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <svg className="absolute -inset-x-2 md:-inset-x-6 -inset-y-1 md:-inset-y-4 w-[calc(100%+16px)] md:w-[calc(100%+48px)] h-[calc(100%+8px)] md:h-[calc(100%+32px)] pointer-events-none z-0 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
         <motion.path 
           d="M 8,50 C 15,10 85,5 92,40 C 97,75 25,95 12,70 C 5,55 15,30 40,25" 
           fill="none" 
@@ -487,24 +487,24 @@ const App = () => {
       </AnimatePresence>
 
       {/* --- HERO SECTION --- */}
-      <section id="home" className="relative pt-32 md:pt-48 pb-12 md:pb-16 w-full z-10 flex flex-col items-center justify-center min-h-[100svh]">
-        <div className="w-full max-w-[1400px] mx-auto px-5 md:px-6 text-center flex flex-col items-center z-20">
+      <section id="home" className="relative pt-28 md:pt-48 pb-10 md:pb-16 w-full z-10 flex flex-col items-center justify-start md:justify-center min-h-[100svh] overflow-hidden">
+        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-6 text-center flex flex-col items-center z-20">
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} 
-            className="px-4 md:px-5 py-2 rounded-full border border-black/5 bg-white/60 backdrop-blur-xl shadow-sm mb-6 md:mb-8 inline-flex items-center gap-2 md:gap-3 interactive-element"
+            className="px-4 py-1.5 md:py-2 rounded-full border border-black/5 bg-white/60 backdrop-blur-xl shadow-sm mb-6 md:mb-8 inline-flex items-center gap-2 interactive-element"
           >
-            <span className="w-2 h-2 rounded-full bg-[#0071e3] animate-pulse"></span>
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#0071e3] animate-pulse"></span>
             <span className="text-[#1d1d1f] font-bold text-[9px] md:text-xs uppercase tracking-[0.2em]">IIT Kharagpur Presents</span>
           </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }} 
-            className="text-[#1d1d1f] text-[11.5vw] md:text-[6.5vw] lg:text-[75px] xl:text-[85px] font-bold tracking-tighter leading-[1.05] text-balance"
+            className="text-[#1d1d1f] text-[9.5vw] sm:text-[6.5vw] lg:text-[75px] xl:text-[85px] font-bold tracking-tighter leading-[1.15] md:leading-[1.05] text-balance w-full max-w-[100vw] px-2"
           >
-            The International Conference on <br />
+            The International <br className="block sm:hidden" /> Conference on <br className="hidden sm:block" />
             <HandDrawnHighlight color="#5ac8fa" delay={1.2}>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0071e3] via-[#5ac8fa] to-[#0071e3] animate-gradient-x bg-[length:200%_auto] pb-1 md:pb-2 inline-block drop-shadow-sm">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#0071e3] via-[#5ac8fa] to-[#0071e3] animate-gradient-x bg-[length:200%_auto] pb-1 md:pb-2 inline-block drop-shadow-sm mt-1 sm:mt-0 leading-tight">
                 Future Mobility Systems
               </span>
             </HandDrawnHighlight>
@@ -512,19 +512,19 @@ const App = () => {
 
           <motion.p 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.6 }} 
-            className="text-[#424245] mt-5 md:mt-6 text-base sm:text-lg md:text-2xl max-w-3xl mx-auto font-medium leading-snug text-balance px-4"
+            className="text-[#424245] mt-5 md:mt-6 text-[15px] sm:text-lg md:text-2xl max-w-3xl mx-auto font-medium leading-relaxed sm:leading-snug text-balance px-4"
           >
             Innovating human movement through the intelligent convergence of energy, data, and autonomous systems.
           </motion.p>
           
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} 
-            className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-3 md:gap-4 bg-white/80 backdrop-blur-2xl px-4 md:px-5 py-3 rounded-2xl sm:rounded-full border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] text-center sm:text-left mx-4"
+            className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-3 md:gap-4 bg-white/80 backdrop-blur-2xl px-4 py-3 md:px-5 rounded-2xl sm:rounded-full border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.06)] text-center sm:text-left mx-4 w-auto max-w-[90vw]"
           >
             <div className="bg-[#0071e3]/10 p-2 md:p-2.5 rounded-full shrink-0">
               <BookOpen size={16} className="text-[#0071e3] md:w-[18px] md:h-[18px]" />
             </div>
-            <p className="text-[#1d1d1f] text-[11px] md:text-sm font-semibold max-w-[280px] md:max-w-md leading-tight">
+            <p className="text-[#1d1d1f] text-[11px] md:text-sm font-semibold max-w-[260px] md:max-w-md leading-tight">
               <span className="text-[#0071e3] uppercase tracking-[0.1em] text-[9px] md:text-[10px] font-bold block sm:inline sm:mr-2 mb-1 sm:mb-0">Indexed Pubs</span> 
               Selected full paper in indexed conference proceedings and special issue journals.
             </p>
@@ -532,15 +532,14 @@ const App = () => {
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }} 
-            className="flex flex-col sm:flex-row justify-center items-center gap-5 md:gap-6 pt-8 md:pt-10 w-full px-6"
+            className="flex flex-col sm:flex-row justify-center items-center gap-5 md:gap-6 pt-8 md:pt-10 w-full px-4"
           >
             <MagneticButton onClick={handleSubmission} className="w-full sm:w-auto bg-[#1d1d1f] text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold text-base md:text-xl hover:bg-[#0071e3] transition-colors flex items-center justify-center gap-3 shadow-[0_20px_40px_-10px_rgba(0,113,227,0.3)] relative overflow-hidden group interactive-element active:scale-95">
               <span className="relative z-10 flex items-center gap-2">Submit Abstract <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" /></span>
-              {/* Shimmer Effect */}
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
             </MagneticButton>
             
-            <div className="flex flex-col text-center sm:text-left sm:pl-6 py-1 sm:border-l-[3px] border-black/10 mt-4 sm:mt-0">
+            <div className="flex flex-col text-center sm:text-left sm:pl-6 py-1 sm:border-l-[3px] border-black/10 mt-2 sm:mt-0">
                <span className="text-base md:text-xl font-bold text-[#1d1d1f] leading-tight">28—31 Jan 2027</span>
                <span className="text-[13px] md:text-base font-semibold text-[#86868b] flex items-center justify-center sm:justify-start gap-1 mt-1">
                  <MapPin size={14}/> Research Park, Kolkata
